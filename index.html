@@ -226,13 +226,16 @@ setInterval(tick, 30000); tick();
 
 /* ---------- problem bank ---------- */
 const BANK = [
- {id:"cheap-seats", title:"Cheap seats", diff:"easy", mins:10, topic:"Lists / Arrays", pattern:"linear scan",
+ {id:"cheap-seats", title:"Cheap seats", diff:"easy", mins:10, topic:"Arrays", pattern:"linear scan",
   stmt:"ticket_prices = [93, 95, 97, 99, 100, 101, 802, 1647, 3235]\nCount how many prices are under $150. Return the count.",
   link:"tree/main/practice/arrays"},
  {id:"title-shout", title:"Title shout", diff:"easy", mins:10, topic:"Strings", pattern:"string iteration + isupper",
   stmt:"titles = [\"ZUCK'S AI MADE $25B\", \"a brief history of AI\", \"MARKETS RALLY\"]\nCount the words that are ALL CAPS (length > 1).",
   link:"tree/main/practice/strings"},
- {id:"tier-check", title:"Tier check", diff:"easy", mins:10, topic:"Dicts / Hash Maps", pattern:"dict lookup",
+ {id:"guest-list", title:"Guest list", diff:"easy", mins:10, topic:"Lists", pattern:"list mutation",
+  stmt:"guests = ['Maya', 'Leo']\n1. Append 'Raj'. 2. Insert 'Zoe' at the front.\n3. Remove 'Leo'. 4. Return the final list and its length.",
+  link:"tree/main/practice/arrays"},
+ {id:"tier-check", title:"Tier check", diff:"easy", mins:10, topic:"Dictionaries", pattern:"dict lookup",
   stmt:"tiers = {'Roblox':'expert', 'Freddie Mac':'novice', 'Stripe':'intermediate'}\nWrite in_tier(company, tier) → True/False.",
   link:"tree/main/practice/hashmaps"},
  {id:"budget-pair", title:"Budget pair", diff:"med", mins:15, topic:"Two Pointers", pattern:"two pointers (sorted) or hash map",
@@ -241,13 +244,13 @@ const BANK = [
  {id:"digit-runs", title:"Digit runs", diff:"med", mins:15, topic:"Strings", pattern:"linear scan, track current run",
   stmt:"s = \"1122334111\"\nReturn the longest run of the same digit, e.g. (digit, length).",
   link:"tree/main/practice/strings"},
- {id:"good-tier", title:"Good tier", diff:"med", mins:15, topic:"Dicts / Hash Maps", pattern:"dict filter",
+ {id:"good-tier", title:"Good tier", diff:"med", mins:15, topic:"Hash Maps", pattern:"dict filter",
   stmt:"companies = {'Roblox':'expert','Stripe':'intermediate','Freddie Mac':'novice','OpenAI':'expert'}\nReturn the list of companies in the 'expert' tier.",
   link:"tree/main/practice/hashmaps"},
  {id:"brackets", title:"Brackets", diff:"med", mins:15, topic:"Stacks", pattern:"stack",
   stmt:"s = \"([{}])\"\nReturn True if every opener is closed in the correct order.",
   link:"tree/main/practice/stacks"},
- {id:"shift-sim", title:"Shift sim", diff:"med", mins:15, topic:"Lists / Arrays", pattern:"array simulation",
+ {id:"shift-sim", title:"Shift sim", diff:"med", mins:15, topic:"Arrays", pattern:"array simulation",
   stmt:"Simulate a rotating shift schedule over 14 days from a start roster.\nReturn the roster on day 14.",
   link:"tree/main/mock"},
  {id:"pressure-sum", title:"Pressure sum", diff:"hard", mins:15, topic:"Monotonic Stack", pattern:"monotonic stack",
@@ -464,12 +467,15 @@ mockRender(); renderMK();
 /* ---------- progress ---------- */
 const TOPICS = [
  {n:"01", name:"Strings", sub:"Digit Blocks shape"},
- {n:"02", name:"Lists / Arrays", sub:"highest priority"},
- {n:"03", name:"Dicts / Hash Maps", sub:"counting · two-sum"},
- {n:"04", name:"Big-O", sub:"say it in 30 seconds"},
- {n:"05", name:"BFS / DFS", sub:"Lakes shape"},
- {n:"06", name:"Stacks", sub:"Pressure Sum shape"},
- {n:"07", name:"Sliding Window / Two Pointers", sub:"new — high value"},
+ {n:"02", name:"Lists", sub:"mutation · list ops"},
+ {n:"03", name:"Arrays", sub:"highest priority"},
+ {n:"04", name:"Dictionaries", sub:"lookup · tiers"},
+ {n:"05", name:"Hash Maps", sub:"counting · two-sum"},
+ {n:"06", name:"Big-O", sub:"say it in 30 seconds"},
+ {n:"07", name:"BFS / DFS", sub:"Lakes shape"},
+ {n:"08", name:"Stacks", sub:"Pressure Sum shape"},
+ {n:"09", name:"Sliding Window", sub:"new — high value"},
+ {n:"10", name:"Two Pointers", sub:"new — high value"},
 ];
 function getPR(){ return store.get("capone.topicProgress", {}); }
 function statusOf(s){
