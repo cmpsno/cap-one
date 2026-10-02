@@ -57,6 +57,18 @@
   .node .track{margin-top:6px;height:8px;border-radius:99px;background:rgba(255,255,255,.22);overflow:hidden}
   .node .fill{height:100%;width:0;background:var(--good);border-radius:99px;transition:width .4s}
   .link{width:0;height:26px;border-left:2px dashed #565a94;margin:0 auto}
+  .node{cursor:pointer}
+  .node .detail{display:none;margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,.16);
+    font-size:.8rem;color:rgba(255,255,255,.8);text-align:left}
+  .node.open .detail{display:block}
+  .node .detail .drow{margin-bottom:9px}
+  .node .detail .drow>span{display:block;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;
+    color:rgba(255,255,255,.45);margin-bottom:3px;font-family:ui-monospace,Menlo,Consolas,monospace}
+  .node .detail ul{padding-left:16px;margin:0}
+  .node .detail li{margin-bottom:2px}
+  .node .detail .mono{font-size:.74rem;color:#fff}
+  .nowpill{display:inline-block;font-size:.62rem;font-weight:700;letter-spacing:.08em;color:#06281d;
+    background:var(--good);border-radius:999px;padding:2px 10px;margin-left:8px;vertical-align:2px}
   /* task rows */
   .task{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;
     background:var(--card);border:1px solid var(--line);border-radius:12px;
@@ -91,6 +103,22 @@
   #log-list .entry .d{color:var(--faint);font-size:.72rem}
   footer{margin-top:50px;color:var(--faint);font-size:.76rem;text-align:center}
   canvas#confetti{position:fixed;inset:0;pointer-events:none;z-index:99}
+  /* flashcards */
+  .fcard{perspective:900px;cursor:pointer;max-width:460px;margin:0 auto}
+  .fcard-inner{position:relative;width:100%;min-height:190px;transform-style:preserve-3d;transition:transform .35s}
+  .fcard.flipped .fcard-inner{transform:rotateY(180deg)}
+  .face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+    background:var(--card2);border:1px solid var(--line2);border-radius:14px;
+    display:flex;align-items:center;justify-content:center;text-align:center;
+    padding:28px 22px;font-size:1.05rem;font-weight:600}
+  .face.back{transform:rotateY(180deg);background:linear-gradient(180deg,var(--node),var(--node2));color:#fff}
+  .face .tagline{position:absolute;top:10px;left:14px;font-size:.65rem;letter-spacing:.12em;color:var(--faint);text-transform:uppercase}
+  .frow{display:flex;gap:10px;justify-content:center;margin-top:16px;flex-wrap:wrap}
+  .fmeta{text-align:center;color:var(--faint);font-size:.75rem;margin-top:10px}
+  .fadd{max-width:460px;margin:22px auto 0;display:flex;flex-direction:column;gap:8px}
+  .fadd input{background:#121113;color:var(--ink);border:1px solid var(--line);
+    border-radius:10px;padding:10px 12px;font-family:inherit;font-size:.85rem}
+  .fadd input:focus{outline:none;border-color:var(--acc)}
   @media(max-width:560px){ h1{font-size:2.2rem} body{padding-top:78px} }
 </style>
 </head>
@@ -99,7 +127,7 @@
 
 <nav>
   <span class="brand">GCA Grind<span class="dot">.</span></span>
-  <a href="#roadmap">Roadmap</a><a href="#lectures">Lectures</a><a href="#guided">Guided</a><a href="#independent">Independent</a><a href="#mocks">Mocks</a><a href="#oaday">OA Day</a>
+  <a href="#roadmap">Roadmap</a><a href="#lectures">Lectures</a><a href="#guided">Guided</a><a href="#flashcards">Cards</a><a href="#independent">Independent</a><a href="#mocks">Mocks</a><a href="#oaday">OA Day</a>
 </nav>
 
 <header>
@@ -114,7 +142,7 @@
 <section id="roadmap">
   <div class="kick mono">Learning path</div>
   <h2>The roadmap<span class="sq">.</span></h2>
-  <p class="desc">Master each topic in order. Progress per topic: lecture 10% · guided 30% · independent 30% · extra 30%.</p>
+  <p class="desc">Master each topic in order — tap a topic for the deep dive. Progress per topic: lecture 10% · guided 30% · independent 30% · extra 30%.</p>
   <div class="chain" id="chain"></div>
 </section>
 
@@ -130,6 +158,28 @@
   <h2>Guided reps<span class="sq">.</span></h2>
   <p class="desc">One step at a time, one topic at a time. Easy exercise first — video example allowed. Retype everything by hand, ghost text stays off. Soft gate: attempt + log stuck points.</p>
   <div id="list-g"></div>
+</section>
+
+<section id="flashcards">
+  <div class="kick mono">Tie it together</div>
+  <h2>Flashcards<span class="sq">.</span></h2>
+  <p class="desc">After guided reps — flip through, say the answer out loud before flipping. Add your own as you go.</p>
+  <div class="fcard" id="fcard"><div class="fcard-inner">
+    <div class="face front"><span class="tagline mono">question</span><span id="fq"></span></div>
+    <div class="face back"><span class="tagline mono">answer</span><span id="fa"></span></div>
+  </div></div>
+  <div class="frow">
+    <button class="ghost" id="f-prev">← prev</button>
+    <button id="f-flip">flip</button>
+    <button class="ghost" id="f-next">next →</button>
+    <button class="ghost" id="f-shuffle">shuffle</button>
+  </div>
+  <div class="fmeta mono" id="f-meta"></div>
+  <div class="fadd">
+    <input id="f-q" placeholder="question — e.g. [] ordered and changeable. duplicates OK?">
+    <input id="f-a" placeholder="answer — e.g. list">
+    <button class="ghost" id="f-add">+ add card</button>
+  </div>
 </section>
 
 <section id="independent">
@@ -186,6 +236,36 @@ const TOPICS = [
 ];
 const W = {exp:10, g:30, i:30, x:30};           // per-topic weights
 const PHASE = {exp:"exp", g:"g", i:"i", x:"x"};
+const XPRACT = {"01":"practice/strings","02":"practice/arrays","03":"practice/hashmaps",
+                "04":"practice","05":"practice/grids","06":"practice/stacks"};
+const DETAILS = {
+ "01":{core:["immutable — you can't edit in place, build new strings instead","indexing s[i], slicing s[l:r], negative index counts from the end","join / split / strip / lower for cleanup","ord('a') = 97 — letter math for ciphers and counting"],
+       ops:"len O(1) · s[i] O(1) · slice O(k) · substring-in O(n·m)",
+       shape:"Digit Blocks (mock Q1) — parse and transform characters"},
+ "02":{core:["ordered, changeable, duplicates OK — index 0 to n-1","append / pop() are O(1) amortized; pop(0) and insert(0) are O(n)","sort is O(n log n); slicing copies, O(k)","enumerate() when you need the index and the value"],
+       ops:"append O(1)* · pop(0) O(n) · sort O(n log n) · slice O(k)",
+       shape:"Shift Schedule (mock Q2) — simulate over an array"},
+ "03":{core:["key → value; keys unique; average O(1) get and set","get(k, default) never throws — use it instead of d[k]","counting pattern: d[c] = d.get(c, 0) + 1","two-sum: store what you've seen, look up target − x"],
+       ops:"get / set / del O(1) average · membership O(1)",
+       shape:"budget-pair complements · counting OA tiers per company"},
+ "04":{core:["describe growth, drop constants, assume the worst case","O(1) < O(log n) < O(n) < O(n log n) < O(n²)","nested loops over the same n → O(n²); halving each step → O(log n)","count space too — extra array O(n), in-place O(1)"],
+       ops:"say it before you code it",
+       shape:"every problem — state it in the first 30 seconds"},
+ "05":{core:["BFS = queue, level by level — shortest path on unweighted grids","DFS = stack or recursion — go deep before going wide","grid moves: 4 directions, bounds check, visited set","Python recursion limit ≈ 1000 — iterative DFS for big grids"],
+       ops:"each cell visited once → O(rows × cols)",
+       shape:"Lakes (mock Q3) — flood fill / count regions"},
+ "06":{core:["LIFO: push = append, pop = pop(), peek = s[-1]","valid parentheses: push opens, pop-and-match on close","monotonic: pop while the top breaks the order — each item in and out once → O(n)","next greater / smaller element is the classic tell"],
+       ops:"push / pop / peek O(1) · monotonic scan O(n)",
+       shape:"Pressure Sum (mock Q4)"},
+};
+function detailHTML(n){
+  const d = DETAILS[n];
+  return `<div class="detail">`
+    + `<div class="drow"><span>core ideas</span><ul>${d.core.map(c=>`<li>${c}</li>`).join("")}</ul></div>`
+    + `<div class="drow"><span>must-know ops</span><p class="mono">${d.ops}</p></div>`
+    + `<div class="drow"><span>oa shape</span><p>${d.shape}</p></div>`
+    + `</div>`;
+}
 const file = (p,f)=>`${REPO}/lectures/${p}/${f}`;
 const esc = s=>s.replace(/</g,"&lt;");
 
@@ -208,7 +288,8 @@ document.getElementById("list-g").innerHTML =
   + task("g-gate","Move on when: attempt + stuck points logged","the soft gate — no mastery test, just an honest attempt");
 document.getElementById("list-i").innerHTML =
   TOPICS.map(t=>topicTask("i",t,"","independent.py","your own example")).join("")
-  + TOPICS.map(t=>task(`x-${t.n}`,`${t.n} · ${t.name} — extra reps`,"leetcode-style, optional juice")).join("")
+  + TOPICS.map(t=>task(`x-${t.n}`,`${t.n} · ${t.name} — extra reps`,
+    `<a href="${REPO}/${XPRACT[t.n]}" target="_blank" rel="noopener">${XPRACT[t.n]}/</a> · TODOs, solo batch`)).join("")
   + task("i-gate","Batch complete — every independent attempted solo","no video, no autocomplete, mistakes preserved");
 document.getElementById("list-m").innerHTML =
   task("m-1","Mixed set 1 — unlabeled, timed loosely",`<a href="${REPO}/practice" target="_blank" rel="noopener">practice/</a>`)
@@ -224,11 +305,14 @@ document.getElementById("list-oa").innerHTML =
 /* roadmap tree */
 document.getElementById("chain").innerHTML = TOPICS.map((t,ix)=>
   `<div class="node" id="node-${t.n}">
-     <h3>${t.name}</h3><div class="anchor">${t.anchor}</div>
+     <h3>${t.name}${t.n==="06"?'<span class="nowpill">▶ NOW</span>':""}</h3><div class="anchor">${t.anchor}</div>
      <div class="prow mono"><span id="reps-${t.n}">0/4</span><span id="pct-${t.n}">0%</span></div>
      <div class="track"><div class="fill" id="fill-${t.n}"></div></div>
+     ${detailHTML(t.n)}
    </div>${ix<TOPICS.length-1?'<div class="link"></div>':''}`
 ).join("");
+document.querySelectorAll(".node").forEach(nd=>
+  nd.addEventListener("click", ()=>nd.classList.toggle("open")));
 
 /* state */
 const store = {
@@ -284,6 +368,163 @@ document.getElementById("reset").addEventListener("click",()=>{
     state={}; store.set(state); localStorage.removeItem("gca-log"); render(); renderLog();
   }
 });
+
+/* flashcards */
+const SEED_CARDS = [
+  // --- lists / arrays (your 10% — lock it in)
+  ["[] · ordered and changeable · duplicates OK","list"],
+  ["lst.append(x) — cost","O(1) amortized"],
+  ["lst.pop(0) — cost, and why","O(n) — everything shifts left"],
+  ["lst[2:5] gives you","items at index 2, 3, 4"],
+  ["sorted(lst) vs lst.sort()","sorted returns a NEW list; sort rearranges in place"],
+  ["loop with index and value","for i, x in enumerate(lst)"],
+  // --- list methods (front = what it's FOR, back = the method)
+  ["add to the FRONT (or any index) — cost","insert(0, x) — O(n)"],
+  ["tack every item of another list onto the end","extend(other)"],
+  ["append vs extend — the difference","append adds ONE item (even a whole list); extend unpacks each item in"],
+  ["remove by VALUE (first occurrence)","remove(x)"],
+  ["remove by INDEX and get it back","pop(i)"],
+  ["delete by index or slice, returns nothing","del lst[i] / del lst[a:b]"],
+  ["empty the list","clear()"],
+  ["how many times x appears","count(x)"],
+  ["where is x? first index, or throws","index(x)"],
+  ["reverse in place (returns nothing)","reverse()"],
+  ["backwards loop without changing the list","reversed(lst) / lst[::-1]"],
+  ["shallow copy","lst.copy() / lst[:]"],
+  ["repeat the list 3 times","lst * 3"],
+  ["min / max / sum of numbers","min(lst) / max(lst) / sum(lst)"],
+  ["is the list empty? the Pythonic check","if not lst:"],
+  ["keep only the evens — the pattern","[x for x in lst if x % 2 == 0]"],
+  ["flatten one level","[x for sub in lst for x in sub]"],
+  ["pair up two lists element-wise","zip(a, b)"],
+  ["sort by length (or any key)","sort(key=len)"],
+  ["sort biggest-first","sort(reverse=True)"],
+  // --- strings
+  ["s[0] = 'x' fails because strings are ______","immutable — build a new string instead"],
+  ["s[::-1]","the string reversed"],
+  ["''.join(words)","glue a list of strings into one"],
+  ["'  hi  '.strip()","'hi' — trims whitespace"],
+  ["ord('a')","97 — letter math"],
+  // --- string methods (front = what it's FOR, back = the method)
+  ["first character uppercase, rest lowercase → 'hello' → 'Hello'","capitalize()"],
+  ["aggressive lowercase, made for caseless comparisons","casefold()"],
+  ["center text in a field of width w, padded with a fill char","center(w, fillchar)"],
+  ["how many times a substring appears","count(sub)"],
+  ["string → bytes (network, files)","encode()"],
+  ["does the string end with this?","endswith(suffix)"],
+  ["does the string start with this?","startswith(prefix)"],
+  ["where is this substring? → index, or -1 if missing","find(sub)"],
+  ["where is this substring? → index, or throws if missing","index(sub)"],
+  ["break into a list on whitespace or a delimiter","split() / split(delim)"],
+  ["break into a list from the RIGHT, at most n splits","rsplit(delim, n)"],
+  ["split into lines — handles \\n, \\r\\n, etc.","splitlines()"],
+  ["glue a list back into one string","' '.join(list)"],
+  ["trim whitespace (or given chars) from both ends","strip()"],
+  ["trim from the left only / right only","lstrip() / rstrip()"],
+  ["swap every occurrence of old with new","replace(old, new)"],
+  ["all lowercase / ALL UPPERCASE","lower() / upper()"],
+  ["flip the case of every letter","swapcase()"],
+  ["First Letter Of Every Word Uppercase","title()"],
+  ["letters and numbers only, at least one char","isalnum()"],
+  ["digits only","isdigit()"],
+  ["whitespace only","isspace()"],
+  ["pad with leading zeros → '42' → '00042'","zfill(width)"],
+  ["chop off a known prefix / suffix","removeprefix(p) / removesuffix(s)"],
+  ["split into (before, sep, after) on first hit","partition(sep)"],
+  // --- dicts / hash maps
+  ["{key: value} · no duplicate keys","dict"],
+  ["d.get(k, 0) vs d[k] when k is missing","get returns 0, no KeyError"],
+  ["counting pattern: d[c] = ______","d.get(c, 0) + 1"],
+  ["two-sum: for each x, look up ______ in the map","target − x (the complement)"],
+  ["loop keys and values together","for k, v in d.items()"],
+  // --- dict methods (front = what it's FOR, back = the method)
+  ["add k→v, but only if k isn't already there","setdefault(k, default)"],
+  ["grouping: d[key].append(x), creating the list on first sight","d.setdefault(key, []).append(x)"],
+  ["merge another dict in — whose values win on clashes?","d.update(other) — other's win"],
+  ["remove k and hand you its value","pop(k)"],
+  ["remove k, hand you its value, or a fallback if missing","pop(k, default)"],
+  ["remove and return the LAST inserted pair","popitem()"],
+  ["empty the whole dict","clear()"],
+  ["shallow copy","d.copy()"],
+  ["build a dict from a list of keys, all starting at one value","dict.fromkeys(keys, v)"],
+  ["loop just the keys / just the values","d.keys() / d.values()"],
+  ["check a key exists before touching it","k in d — O(1) average"],
+  ["flip keys and values","{v: k for k, v in d.items()}"],
+  ["squares dict in one line","{x: x*x for x in range(n)}"],
+  ["sort by value → list of pairs","sorted(d.items(), key=lambda kv: kv[1])"],
+  ["never think about missing keys again","defaultdict(int) / defaultdict(list)"],
+  ["count anything in one line","Counter(s) — from collections"],
+  ["the k most common items","Counter(s).most_common(k)"],
+  // --- sets & tuples
+  ["{} with no pairs · unordered · no duplicates","set"],
+  ["remove duplicates from a list","list(set(lst))"],
+  ["x in my_set — cost","O(1) average"],
+  ["() · ordered · unchangeable · duplicates OK","tuple"],
+  // --- stacks (you're on this now)
+  ["LIFO · push / pop","stack"],
+  ["push, pop, peek on a Python list","append(x), pop(), s[-1]"],
+  ["valid parentheses: on '(' do what?","push it; on ')' pop and check it matches"],
+  ["monotonic increasing stack: pop while top ______ new value","> new value (it breaks the order)"],
+  ["each item enters and leaves a monotonic stack once, so the scan is","O(n)"],
+  ["peek without popping","s[-1]"],
+  ["is the stack empty?","if not s:"],
+  ["valid parentheses — the full loop","push opens; on close: if empty or pop() doesn't match → False; end: not s"],
+  ["next greater element — the tell","monotonic decreasing stack"],
+  ["daily temperatures / stock span — the pattern","monotonic stack"],
+  ["evaluate RPN like '3 4 +'","push numbers; operator pops two, pushes the result"],
+  ["undo button in an editor","a stack"],
+  ["function calls run on this — why recursion depth matters","the call stack"],
+  // --- queues, BFS / DFS
+  ["FIFO · popleft is O(1) with this","deque (as a queue)"],
+  ["BFS uses a ______, iterative DFS uses a ______","queue / stack"],
+  ["grid BFS/DFS: the three checks per neighbor","in bounds · not visited · is land"],
+  ["visit every node level by level","BFS — breadth-first search"],
+  ["go as deep as possible, then backtrack","DFS — depth-first search"],
+  ["shortest path on an unweighted grid","BFS — first time you reach a cell is the shortest way there"],
+  ["BFS setup: the 3 lines","q = deque([start]); visited = {start}"],
+  ["BFS loop: pop left, then what","for each neighbor: if valid and unvisited → mark visited, append to queue"],
+  ["the 4 grid moves","[(0,1),(0,-1),(1,0),(-1,0)]"],
+  ["mark visited when you ENQUEUE, not when you pop — why","otherwise the same cell gets queued over and over"],
+  ["iterative DFS: swap the queue for a","stack (a plain list) — pop() from the end"],
+  ["recursive DFS skeleton","def dfs(r,c): mark visited; for each valid neighbor → dfs(nr,nc)"],
+  ["Python recursion limit","≈1000 — go iterative for big grids"],
+  ["count islands / lakes — the pattern","flood fill from each unvisited land cell, count the fills"],
+  ["flood fill: what you do to a cell when you visit","mark visited (or sink it to 0)"],
+  // --- big-O
+  ["binary search halves the search each step","O(log n)"],
+  ["two nested loops over n","O(n²)"],
+  ["in big-O you drop ______","constants and lower-order terms"],
+  ["sorting a list of n items","O(n log n)"],
+];
+function getCards(){ try{return JSON.parse(localStorage.getItem("gca-cards")||"[]")}catch(e){return[]} }
+function allCards(){ return SEED_CARDS.concat(getCards()); }
+let fi = 0;
+const fcard = document.getElementById("fcard");
+function showCard(){
+  const cards = allCards();
+  if(!cards.length) return;
+  fi = ((fi % cards.length) + cards.length) % cards.length;
+  fcard.classList.remove("flipped");
+  document.getElementById("fq").textContent = cards[fi][0];
+  document.getElementById("fa").textContent = cards[fi][1];
+  document.getElementById("f-meta").textContent = `${fi+1} / ${cards.length} cards`;
+}
+fcard.addEventListener("click", ()=>fcard.classList.toggle("flipped"));
+document.getElementById("f-flip").addEventListener("click", ()=>fcard.classList.toggle("flipped"));
+document.getElementById("f-next").addEventListener("click", ()=>{ fi++; showCard(); });
+document.getElementById("f-prev").addEventListener("click", ()=>{ fi--; showCard(); });
+document.getElementById("f-shuffle").addEventListener("click", ()=>{
+  fi = Math.random()*allCards().length|0; showCard();
+});
+document.getElementById("f-add").addEventListener("click", ()=>{
+  const q=document.getElementById("f-q").value.trim(), a=document.getElementById("f-a").value.trim();
+  if(!q||!a) return;
+  const custom=getCards(); custom.push([q,a]);
+  localStorage.setItem("gca-cards", JSON.stringify(custom));
+  document.getElementById("f-q").value=""; document.getElementById("f-a").value="";
+  fi = allCards().length-1; showCard();
+});
+showCard();
 
 /* countdown */
 const due=new Date("2026-10-06T23:59:59-04:00");
