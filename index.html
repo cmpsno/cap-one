@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GCA Grind — Cap One OA Roadmap</title>
+<style>
+  :root{
+    --bg:#1c1b1e; --card:#232326; --card2:#2f3136; --node:#3f4176; --node2:#353763;
+    --ink:#f6f6f6; --ink2:#d4d4d4; --dim:#b8b8b8; --faint:#8a8a92;
+    --acc:#627eff; --good:#4ade80; --warn:#f5a623; --hard:#f87171;
+    --line:rgba(255,255,255,.1); --line2:rgba(255,255,255,.15);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    max-width:880px;margin:0 auto;padding:86px 18px 80px;line-height:1.5}
+  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+  /* floating pill nav */
+  nav{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:50;
+    background:rgba(28,27,30,.92);backdrop-filter:blur(8px);
+    border:1px solid var(--line2);border-radius:999px;padding:8px 10px;
+    display:flex;gap:2px;align-items:center;box-shadow:0 4px 20px rgba(0,0,0,.4);
+    max-width:calc(100vw - 24px);overflow-x:auto}
+  nav .brand{font-weight:700;font-size:.85rem;padding:4px 12px 4px 8px;white-space:nowrap}
+  nav .brand .dot{color:var(--acc)}
+  nav a{color:var(--ink2);text-decoration:none;font-size:.78rem;font-weight:500;
+    padding:6px 11px;border-radius:999px;white-space:nowrap}
+  nav a:hover{background:rgba(255,255,255,.08);color:var(--ink)}
+  /* hero */
+  .eyebrow{font-size:.72rem;letter-spacing:.14em;color:var(--faint);text-transform:uppercase;
+    border:1px solid var(--line);border-radius:999px;display:inline-block;padding:5px 14px;margin-bottom:18px}
+  h1{font-size:3rem;font-weight:700;letter-spacing:-.03em;line-height:1.05}
+  h1 .sq{color:var(--acc)}
+  .lede{color:var(--dim);margin-top:12px;font-size:1.02rem;max-width:60ch}
+  #count{margin-top:14px;font-size:.85rem;color:var(--warn)}
+  .obar{margin-top:14px;background:#121113;border:1px solid var(--line);border-radius:10px;
+    height:14px;overflow:hidden}
+  #bar{height:100%;width:0;background:var(--good);transition:width .4s}
+  .obar-meta{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;color:var(--faint)}
+  /* sections */
+  section{margin-top:44px}
+  section .kick{font-size:.7rem;letter-spacing:.14em;color:var(--faint);text-transform:uppercase;margin-bottom:6px}
+  section h2{font-size:1.9rem;font-weight:700;letter-spacing:-.02em}
+  section h2 .sq{color:var(--acc)}
+  section .desc{color:var(--dim);font-size:.9rem;margin:6px 0 18px;max-width:64ch}
+  /* roadmap tree */
+  .chain{display:flex;flex-direction:column;align-items:stretch;max-width:460px;margin:0 auto}
+  .node{background:linear-gradient(180deg,var(--node),var(--node2));
+    border:1px solid var(--line2);border-radius:14px;padding:16px 18px 14px;
+    box-shadow:0 2px 12px rgba(0,0,0,.2), inset 0 1px 0 rgba(255,255,255,.06)}
+  .node h3{font-size:1.02rem;font-weight:700}
+  .node .anchor{color:rgba(255,255,255,.65);font-size:.8rem;margin-top:2px}
+  .node .prow{display:flex;justify-content:space-between;margin-top:12px;
+    font-size:.72rem;color:rgba(255,255,255,.85)}
+  .node .track{margin-top:6px;height:8px;border-radius:99px;background:rgba(255,255,255,.22);overflow:hidden}
+  .node .fill{height:100%;width:0;background:var(--good);border-radius:99px;transition:width .4s}
+  .link{width:0;height:26px;border-left:2px dashed #565a94;margin:0 auto}
+  /* task rows */
+  .task{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;
+    background:var(--card);border:1px solid var(--line);border-radius:12px;
+    margin-bottom:8px;cursor:pointer;transition:border-color .15s}
+  .task:hover{border-color:var(--line2)}
+  .task input{appearance:none;width:20px;height:20px;min-width:20px;border:2px solid var(--faint);
+    border-radius:6px;margin-top:2px;cursor:pointer;position:relative;background:transparent}
+  .task input:checked{border-color:var(--good);background:var(--good)}
+  .task input:checked::after{content:"✓";position:absolute;inset:0;display:flex;align-items:center;
+    justify-content:center;color:#06281d;font-weight:700;font-size:14px}
+  .task.done .t{color:var(--faint);text-decoration:line-through}
+  .task .t{font-size:.92rem;font-weight:500}
+  .task .hint{display:block;color:var(--faint);font-size:.78rem;margin-top:3px;font-weight:400}
+  .task a{color:var(--acc);text-decoration:none}
+  .task a:hover{text-decoration:underline}
+  .pill{display:inline-block;font-size:.68rem;font-weight:600;border-radius:999px;padding:2px 10px;margin-left:8px;vertical-align:2px}
+  .pill.easy{color:#48c78e;background:rgba(72,199,142,.14);border:1px solid rgba(72,199,142,.35)}
+  .pill.med{color:#f5a623;background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.35)}
+  .pill.hard{color:#f87171;background:rgba(248,113,113,.12);border:1px solid rgba(248,113,113,.35)}
+  /* log */
+  textarea{width:100%;min-height:120px;background:#121113;color:var(--ink);
+    border:1px solid var(--line);border-radius:12px;padding:12px;
+    font-family:inherit;font-size:.85rem;resize:vertical}
+  textarea:focus{outline:none;border-color:var(--acc)}
+  .row{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+  button{background:var(--acc);border:none;color:#fff;font-weight:700;border-radius:10px;
+    padding:10px 20px;cursor:pointer;font-family:inherit;font-size:.85rem}
+  button:hover{filter:brightness(1.08)}
+  button.ghost{background:transparent;color:var(--dim);border:1px solid var(--line2)}
+  #log-list .entry{border:1px solid var(--line);border-left:3px solid var(--acc);
+    padding:8px 14px;margin:10px 0;background:var(--card);border-radius:0 10px 10px 0;font-size:.85rem}
+  #log-list .entry .d{color:var(--faint);font-size:.72rem}
+  footer{margin-top:50px;color:var(--faint);font-size:.76rem;text-align:center}
+  canvas#confetti{position:fixed;inset:0;pointer-events:none;z-index:99}
+  @media(max-width:560px){ h1{font-size:2.2rem} body{padding-top:78px} }
+</style>
+</head>
+<body>
+<canvas id="confetti"></canvas>
+
+<nav>
+  <span class="brand">GCA Grind<span class="dot">.</span></span>
+  <a href="#roadmap">Roadmap</a><a href="#lectures">Lectures</a><a href="#guided">Guided</a><a href="#independent">Independent</a><a href="#mocks">Mocks</a><a href="#oaday">OA Day</a>
+</nav>
+
+<header>
+  <span class="eyebrow mono">Capital One · TDP Associate · GCA</span>
+  <h1>The grind<span class="sq">.</span></h1>
+  <p class="lede">They Do → We Do → I Do. One topic at a time, then batch the independents. Track every rep below — the roadmap fills as you go.</p>
+  <div id="count" class="mono"></div>
+  <div class="obar"><div id="bar"></div></div>
+  <div class="obar-meta mono"><span id="bar-count">0/0 reps</span><span id="bar-pct">0%</span></div>
+</header>
+
+<section id="roadmap">
+  <div class="kick mono">Learning path</div>
+  <h2>The roadmap<span class="sq">.</span></h2>
+  <p class="desc">Master each topic in order. Progress per topic: lecture 10% · guided 30% · independent 30% · extra 30%.</p>
+  <div class="chain" id="chain"></div>
+</section>
+
+<section id="lectures">
+  <div class="kick mono">Phase 01 · They do</div>
+  <h2>Lectures<span class="sq">.</span></h2>
+  <p class="desc">Watch, take notes, keep them open beside you. Worth 10% a topic — easy juice.</p>
+  <div id="list-exp"></div>
+</section>
+
+<section id="guided">
+  <div class="kick mono">Phase 02 · We do</div>
+  <h2>Guided reps<span class="sq">.</span></h2>
+  <p class="desc">One step at a time, one topic at a time. Easy exercise first — video example allowed. Retype everything by hand, ghost text stays off. Soft gate: attempt + log stuck points.</p>
+  <div id="list-g"></div>
+</section>
+
+<section id="independent">
+  <div class="kick mono">Phase 03 · I do</div>
+  <h2>Independent reps<span class="sq">.</span></h2>
+  <p class="desc">Batch mode. Solo — no video, no autocomplete. Make the example your own, mistakes preserved.</p>
+  <div id="list-i"></div>
+</section>
+
+<section id="mixed">
+  <div class="kick mono">Phase 04 · No labels</div>
+  <h2>Mixed practice<span class="sq">.</span></h2>
+  <p class="desc">Topic not announced. This is the real OA shape — read, recognize, solve.</p>
+  <div id="list-m"></div>
+</section>
+
+<section id="mocks">
+  <div class="kick mono">Phase 05 · Timed</div>
+  <h2>Mocks<span class="sq">.</span></h2>
+  <p class="desc">Diagnostic first, full 70-minute dress rehearsal when checkpoints are green.</p>
+  <div id="list-mk"></div>
+</section>
+
+<section id="oaday">
+  <div class="kick mono">Phase 06 · Ship it</div>
+  <h2>OA day<span class="sq">.</span></h2>
+  <p class="desc">Due before Oct 6 — aim to finish by Oct 5.</p>
+  <div id="list-oa"></div>
+</section>
+
+<section id="log">
+  <div class="kick mono">The soft gate</div>
+  <h2>Stuck-points log<span class="sq">.</span></h2>
+  <p class="desc">Attempt + log what's stuck, then advance. Saves on this device.</p>
+  <textarea id="log-input" class="mono" placeholder="10/02 — lists guided: off-by-one on the slice end. fixed by printing the slice first."></textarea>
+  <div class="row">
+    <button id="log-add">log it 🚀</button>
+    <button class="ghost" id="reset">reset all progress</button>
+  </div>
+  <div id="log-list"></div>
+</section>
+
+<footer class="mono">gca grind · progress lives in this browser's localStorage</footer>
+
+<script>
+const REPO = "https://github.com/cmpsno/cap-one/blob/main";
+const TOPICS = [
+  {n:"01", name:"Strings",           anchor:"TikTok feed titles",                  path:"01-strings",  diff:"easy"},
+  {n:"02", name:"Lists / Arrays",    anchor:"Celtics ticket prices · $300 capstone", path:"02-lists",  diff:"easy"},
+  {n:"03", name:"Dicts / Hash Maps", anchor:"OA difficulty tiers · budget-pair",    path:"03-dicts",  diff:"med"},
+  {n:"04", name:"Big-O",             anchor:"say it before you code it",            path:"04-big-o",  diff:"med"},
+  {n:"05", name:"BFS / DFS",         anchor:"grids & graphs · Lakes Q3",            path:"05-bfs-dfs", diff:"hard"},
+  {n:"06", name:"Stacks",            anchor:"monotonic stack · Pressure Sum Q4",    path:"06-stacks",  diff:"hard"},
+];
+const W = {exp:10, g:30, i:30, x:30};           // per-topic weights
+const PHASE = {exp:"exp", g:"g", i:"i", x:"x"};
+const file = (p,f)=>`${REPO}/lectures/${p}/${f}`;
+const esc = s=>s.replace(/</g,"&lt;");
+
+/* seed: arrays lecture reviewed + problem worked with Bro Code = 10% */
+const SEED = {"exp-02": true};
+
+function task(id, title, hint){
+  return `<label class="task" data-id="${id}"><input type="checkbox" data-id="${id}">`
+    + `<span class="t">${title}${hint?`<span class="hint">${hint}</span>`:""}</span></label>`;
+}
+function topicTask(ph, t, label, fname, note){
+  return task(`${ph}-${t.n}`, `${t.n} · ${t.name} <span class="pill ${t.diff}">${t.diff==="med"?"med":t.diff}</span>`,
+    `<a href="${file(t.path,fname)}" target="_blank" rel="noopener">${fname}</a> · ${t.anchor} · ${note}`);
+}
+
+document.getElementById("list-exp").innerHTML =
+  TOPICS.map(t=>topicTask("exp",t,"","notes.md","lecture + notes")).join("");
+document.getElementById("list-g").innerHTML =
+  TOPICS.map(t=>topicTask("g",t,"","guided.py","video example OK")).join("")
+  + task("g-gate","Move on when: attempt + stuck points logged","the soft gate — no mastery test, just an honest attempt");
+document.getElementById("list-i").innerHTML =
+  TOPICS.map(t=>topicTask("i",t,"","independent.py","your own example")).join("")
+  + TOPICS.map(t=>task(`x-${t.n}`,`${t.n} · ${t.name} — extra reps`,"leetcode-style, optional juice")).join("")
+  + task("i-gate","Batch complete — every independent attempted solo","no video, no autocomplete, mistakes preserved");
+document.getElementById("list-m").innerHTML =
+  task("m-1","Mixed set 1 — unlabeled, timed loosely",`<a href="${REPO}/practice" target="_blank" rel="noopener">practice/</a>`)
+  + task("m-2","Mixed set 2 — unlabeled, timed loosely",`<a href="${REPO}/practice" target="_blank" rel="noopener">practice/</a>`);
+document.getElementById("list-mk").innerHTML =
+  task("mk-diag","Diagnostic mock — Digit Blocks · Shift Schedule · Lakes · Pressure Sum",
+    `<a href="${REPO}/mock" target="_blank" rel="noopener">mock/</a> · even a 7% is fine, want the gaps`)
+  + task("mk-full","Full 70-min mock — CodeSignal shape, proctored conditions","4 problems, 70:00, no pausing");
+document.getElementById("list-oa").innerHTML =
+  task("oa-vjt","Virtual Job Tryout — untimed behavioral","do it rested, not rushed")
+  + task("oa-gca","CodeSignal GCA — 4 problems, 70 min, proctored","aim Oct 5 · hard due Oct 6");
+
+/* roadmap tree */
+document.getElementById("chain").innerHTML = TOPICS.map((t,ix)=>
+  `<div class="node" id="node-${t.n}">
+     <h3>${t.name}</h3><div class="anchor">${t.anchor}</div>
+     <div class="prow mono"><span id="reps-${t.n}">0/4</span><span id="pct-${t.n}">0%</span></div>
+     <div class="track"><div class="fill" id="fill-${t.n}"></div></div>
+   </div>${ix<TOPICS.length-1?'<div class="link"></div>':''}`
+).join("");
+
+/* state */
+const store = {
+  get(){ try{return Object.assign({}, SEED, JSON.parse(localStorage.getItem("gca-grind")||"{}"))}catch(e){return Object.assign({},SEED)} },
+  set(d){ localStorage.setItem("gca-grind", JSON.stringify(d)); }
+};
+let state = store.get();
+const boxes = [...document.querySelectorAll('input[type="checkbox"]')];
+
+function topicPct(t){
+  let p=0, done=0;
+  for(const [k,w] of Object.entries(W)){
+    if(state[`${k}-${t.n}`]){ p+=w; done++; }
+  }
+  return {p, done};
+}
+function render(){
+  boxes.forEach(b=>{
+    b.checked = !!state[b.dataset.id];
+    b.closest(".task").classList.toggle("done", b.checked);
+  });
+  TOPICS.forEach(t=>{
+    const {p, done} = topicPct(t);
+    document.getElementById(`fill-${t.n}`).style.width = p+"%";
+    document.getElementById(`pct-${t.n}`).textContent = p+"%";
+    document.getElementById(`reps-${t.n}`).textContent = `${done}/4`;
+  });
+  const done = boxes.filter(b=>b.checked).length;
+  const pct = Math.round(done/boxes.length*100);
+  document.getElementById("bar").style.width = pct+"%";
+  document.getElementById("bar-count").textContent = `${done}/${boxes.length} reps`;
+  document.getElementById("bar-pct").textContent = pct+"%";
+  if(pct===100 && !render.celebrated){ render.celebrated=true; confetti(); }
+  if(pct<100) render.celebrated=false;
+}
+boxes.forEach(b=>b.addEventListener("change",()=>{ state[b.dataset.id]=b.checked; store.set(state); render(); }));
+
+/* log */
+const logInput=document.getElementById("log-input"), logList=document.getElementById("log-list");
+const getLog=()=>{ try{return JSON.parse(localStorage.getItem("gca-log")||"[]")}catch(e){return[]} };
+function renderLog(){
+  logList.innerHTML = getLog().slice().reverse()
+    .map(e=>`<div class="entry"><div class="d mono">${esc(e.d)}</div>${esc(e.t)}</div>`).join("");
+}
+document.getElementById("log-add").addEventListener("click",()=>{
+  const t=logInput.value.trim(); if(!t) return;
+  const log=getLog(); log.push({d:new Date().toLocaleString(), t});
+  localStorage.setItem("gca-log", JSON.stringify(log));
+  logInput.value=""; renderLog();
+});
+document.getElementById("reset").addEventListener("click",()=>{
+  if(confirm("Reset all checkboxes and the log?")){
+    state={}; store.set(state); localStorage.removeItem("gca-log"); render(); renderLog();
+  }
+});
+
+/* countdown */
+const due=new Date("2026-10-06T23:59:59-04:00");
+function tick(){
+  const ms=due-new Date(), el=document.getElementById("count");
+  if(ms<=0){ el.textContent="OA window closed."; return; }
+  const d=Math.floor(ms/864e5), h=Math.floor(ms%864e5/36e5), m=Math.floor(ms%36e5/6e4);
+  el.textContent=`⏳ ${d}d ${h}h ${m}m until the OA window closes · aim: done by Oct 5`;
+}
+setInterval(tick,30000); tick();
+
+/* confetti */
+function confetti(){
+  const c=document.getElementById("confetti"), x=c.getContext("2d");
+  c.width=innerWidth; c.height=innerHeight;
+  const cols=["#627eff","#8a82dc","#4ade80","#f5a623","#f472b6"];
+  const ps=Array.from({length:150},()=>({x:Math.random()*c.width,y:-20-Math.random()*c.height*.3,
+    s:4+Math.random()*6,v:2+Math.random()*3,r:Math.random()*Math.PI,vr:(Math.random()-.5)*.2,
+    col:cols[Math.random()*cols.length|0]}));
+  let f=0; (function anim(){
+    x.clearRect(0,0,c.width,c.height); f++;
+    ps.forEach(p=>{p.y+=p.v;p.r+=p.vr;p.x+=Math.sin(f/20+p.r)*1.5;
+      x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.col;x.fillRect(-p.s/2,-p.s/2,p.s,p.s*.6);x.restore();});
+    if(f<220) requestAnimationFrame(anim); else x.clearRect(0,0,c.width,c.height);
+  })();
+}
+render(); renderLog();
+</script>
+</body>
+</html>
