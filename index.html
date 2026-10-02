@@ -3,23 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GCA Grind — Cap One OA Roadmap</title>
+<title>GCA Grind — Rep Engine</title>
 <style>
   :root{
-    --bg:#1c1b1e; --card:#232326; --card2:#2f3136; --node:#3f4176; --node2:#353763;
+    --bg:#1c1b1e; --card:#232326; --card2:#2f3136;
     --ink:#f6f6f6; --ink2:#d4d4d4; --dim:#b8b8b8; --faint:#8a8a92;
-    --acc:#627eff; --good:#4ade80; --warn:#f5a623; --hard:#f87171;
-    --line:rgba(255,255,255,.1); --line2:rgba(255,255,255,.15);
+    --acc:#627eff; --good:#4ade80; --warn:#f5a623; --bad:#f87171;
+    --line:rgba(255,255,255,.1); --line2:rgba(255,255,255,.16);
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
   body{background:var(--bg);color:var(--ink);
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    max-width:880px;margin:0 auto;padding:86px 18px 80px;line-height:1.5}
+    max-width:900px;margin:0 auto;padding:86px 18px 80px;line-height:1.5}
   .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
-  /* floating pill nav */
   nav{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:50;
-    background:rgba(28,27,30,.92);backdrop-filter:blur(8px);
+    background:rgba(28,27,30,.94);backdrop-filter:blur(8px);
     border:1px solid var(--line2);border-radius:999px;padding:8px 10px;
     display:flex;gap:2px;align-items:center;box-shadow:0 4px 20px rgba(0,0,0,.4);
     max-width:calc(100vw - 24px);overflow-x:auto}
@@ -28,530 +27,491 @@
   nav a{color:var(--ink2);text-decoration:none;font-size:.78rem;font-weight:500;
     padding:6px 11px;border-radius:999px;white-space:nowrap}
   nav a:hover{background:rgba(255,255,255,.08);color:var(--ink)}
-  /* hero */
   .eyebrow{font-size:.72rem;letter-spacing:.14em;color:var(--faint);text-transform:uppercase;
     border:1px solid var(--line);border-radius:999px;display:inline-block;padding:5px 14px;margin-bottom:18px}
   h1{font-size:3rem;font-weight:700;letter-spacing:-.03em;line-height:1.05}
   h1 .sq{color:var(--acc)}
-  .lede{color:var(--dim);margin-top:12px;font-size:1.02rem;max-width:60ch}
+  .lede{color:var(--dim);margin-top:12px;font-size:1.02rem;max-width:62ch}
   #count{margin-top:14px;font-size:.85rem;color:var(--warn)}
-  .obar{margin-top:14px;background:#121113;border:1px solid var(--line);border-radius:10px;
-    height:14px;overflow:hidden}
-  #bar{height:100%;width:0;background:var(--good);transition:width .4s}
-  .obar-meta{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;color:var(--faint)}
-  /* sections */
-  section{margin-top:44px}
+  section{margin-top:46px}
   section .kick{font-size:.7rem;letter-spacing:.14em;color:var(--faint);text-transform:uppercase;margin-bottom:6px}
   section h2{font-size:1.9rem;font-weight:700;letter-spacing:-.02em}
   section h2 .sq{color:var(--acc)}
-  section .desc{color:var(--dim);font-size:.9rem;margin:6px 0 18px;max-width:64ch}
-  /* roadmap tree */
-  .chain{display:flex;flex-direction:column;align-items:stretch;max-width:460px;margin:0 auto}
-  .node{background:linear-gradient(180deg,var(--node),var(--node2));
-    border:1px solid var(--line2);border-radius:14px;padding:16px 18px 14px;
-    box-shadow:0 2px 12px rgba(0,0,0,.2), inset 0 1px 0 rgba(255,255,255,.06)}
-  .node h3{font-size:1.02rem;font-weight:700}
-  .node .anchor{color:rgba(255,255,255,.65);font-size:.8rem;margin-top:2px}
-  .node .prow{display:flex;justify-content:space-between;margin-top:12px;
-    font-size:.72rem;color:rgba(255,255,255,.85)}
-  .node .track{margin-top:6px;height:8px;border-radius:99px;background:rgba(255,255,255,.22);overflow:hidden}
-  .node .fill{height:100%;width:0;background:var(--good);border-radius:99px;transition:width .4s}
-  .link{width:0;height:26px;border-left:2px dashed #565a94;margin:0 auto}
-  .node{cursor:pointer}
-  .node .detail{display:none;margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,.16);
-    font-size:.8rem;color:rgba(255,255,255,.8);text-align:left}
-  .node.open .detail{display:block}
-  .node .detail .drow{margin-bottom:9px}
-  .node .detail .drow>span{display:block;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;
-    color:rgba(255,255,255,.45);margin-bottom:3px;font-family:ui-monospace,Menlo,Consolas,monospace}
-  .node .detail ul{padding-left:16px;margin:0}
-  .node .detail li{margin-bottom:2px}
-  .node .detail .mono{font-size:.74rem;color:#fff}
-  .nowpill{display:inline-block;font-size:.62rem;font-weight:700;letter-spacing:.08em;color:#06281d;
-    background:var(--good);border-radius:999px;padding:2px 10px;margin-left:8px;vertical-align:2px}
-  /* task rows */
-  .task{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;
-    background:var(--card);border:1px solid var(--line);border-radius:12px;
-    margin-bottom:8px;cursor:pointer;transition:border-color .15s}
-  .task:hover{border-color:var(--line2)}
-  .task input{appearance:none;width:20px;height:20px;min-width:20px;border:2px solid var(--faint);
-    border-radius:6px;margin-top:2px;cursor:pointer;position:relative;background:transparent}
-  .task input:checked{border-color:var(--good);background:var(--good)}
-  .task input:checked::after{content:"✓";position:absolute;inset:0;display:flex;align-items:center;
-    justify-content:center;color:#06281d;font-weight:700;font-size:14px}
-  .task.done .t{color:var(--faint);text-decoration:line-through}
-  .task .t{font-size:.92rem;font-weight:500}
-  .task .hint{display:block;color:var(--faint);font-size:.78rem;margin-top:3px;font-weight:400}
-  .task a{color:var(--acc);text-decoration:none}
-  .task a:hover{text-decoration:underline}
+  section .desc{color:var(--dim);font-size:.9rem;margin:6px 0 18px;max-width:66ch}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:12px}
+  .card h3{font-size:1.05rem;font-weight:700}
+  .card .meta{color:var(--faint);font-size:.76rem;margin-top:4px}
+  .card p.stmt{color:var(--ink2);font-size:.9rem;margin:10px 0;white-space:pre-wrap}
+  .card a.src{color:var(--acc);text-decoration:none;font-size:.8rem}
+  .card a.src:hover{text-decoration:underline}
   .pill{display:inline-block;font-size:.68rem;font-weight:600;border-radius:999px;padding:2px 10px;margin-left:8px;vertical-align:2px}
   .pill.easy{color:#48c78e;background:rgba(72,199,142,.14);border:1px solid rgba(72,199,142,.35)}
   .pill.med{color:#f5a623;background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.35)}
   .pill.hard{color:#f87171;background:rgba(248,113,113,.12);border:1px solid rgba(248,113,113,.35)}
-  /* log */
-  textarea{width:100%;min-height:120px;background:#121113;color:var(--ink);
-    border:1px solid var(--line);border-radius:12px;padding:12px;
-    font-family:inherit;font-size:.85rem;resize:vertical}
-  textarea:focus{outline:none;border-color:var(--acc)}
-  .row{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+  .pill.info{color:var(--acc);background:rgba(98,126,255,.12);border:1px solid rgba(98,126,255,.35)}
+  .pill.good{color:var(--good);background:rgba(74,222,128,.12);border:1px solid rgba(74,222,128,.35)}
+  .pill.bad{color:var(--bad);background:rgba(248,113,113,.12);border:1px solid rgba(248,113,113,.35)}
+  .trow{display:flex;align-items:center;gap:10px;margin-top:12px;flex-wrap:wrap}
+  .t-display{font-size:1.5rem;font-weight:700;letter-spacing:.02em;min-width:110px}
+  .t-display.over{color:var(--bad)}
   button{background:var(--acc);border:none;color:#fff;font-weight:700;border-radius:10px;
-    padding:10px 20px;cursor:pointer;font-family:inherit;font-size:.85rem}
+    padding:9px 16px;cursor:pointer;font-family:inherit;font-size:.82rem}
   button:hover{filter:brightness(1.08)}
   button.ghost{background:transparent;color:var(--dim);border:1px solid var(--line2)}
-  #log-list .entry{border:1px solid var(--line);border-left:3px solid var(--acc);
-    padding:8px 14px;margin:10px 0;background:var(--card);border-radius:0 10px 10px 0;font-size:.85rem}
-  #log-list .entry .d{color:var(--faint);font-size:.72rem}
+  button.small{padding:6px 12px;font-size:.76rem}
+  button:disabled{opacity:.35;cursor:default}
+  button.on{background:var(--good);color:#06281d}
+  button.on-bad{background:var(--bad);color:#2b0a0a}
+  button.on-warn{background:var(--warn);color:#2b1a05}
+  .pattern{margin-top:10px;font-size:.82rem;color:var(--faint);display:none}
+  .pattern.show{display:block}
+  .pattern b{color:var(--acc)}
+  textarea,input[type=text],input[type=date],select{background:#121113;color:var(--ink);
+    border:1px solid var(--line);border-radius:10px;padding:10px 12px;
+    font-family:inherit;font-size:.85rem;width:100%}
+  textarea:focus,input:focus,select:focus{outline:none;border-color:var(--acc)}
+  textarea{resize:vertical;min-height:64px}
+  label.f{display:block;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin:10px 0 4px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  @media(max-width:640px){.grid2{grid-template-columns:1fr} h1{font-size:2.2rem} body{padding-top:78px}}
+  pre{background:#121113;border:1px solid var(--line);border-radius:12px;padding:14px 16px;
+    font-size:.8rem;line-height:1.55;overflow-x:auto;margin:0 0 12px;color:var(--ink2)}
+  pre .cm{color:var(--faint)}
+  .entry{border:1px solid var(--line);border-left:3px solid var(--warn);background:var(--card);
+    border-radius:0 10px 10px 0;padding:10px 14px;margin:10px 0;font-size:.85rem}
+  .entry .d{color:var(--faint);font-size:.72rem}
+  .entry .rowline{margin-top:4px;color:var(--ink2)}
+  .entry .rowline b{color:var(--ink)}
+  .entry button{margin-top:8px}
+  .tprog{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--card);
+    border:1px solid var(--line);border-radius:12px;margin-bottom:8px}
+  .tprog .nm{font-weight:600;font-size:.92rem;flex:1}
+  .tprog .nm .sub{display:block;font-weight:400;color:var(--faint);font-size:.76rem}
+  .dots{display:flex;gap:6px}
+  .dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--faint)}
+  .dot.fill{background:var(--good);border-color:var(--good)}
+  .planrow{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--card);
+    border:1px solid var(--line);border-radius:12px;margin-bottom:8px}
+  .planrow .n{font-weight:700;color:var(--acc);min-width:28px}
+  .planrow .t{flex:1;font-weight:600}
+  .planrow .t .sub{display:block;font-weight:400;color:var(--faint);font-size:.76rem}
   footer{margin-top:50px;color:var(--faint);font-size:.76rem;text-align:center}
-  canvas#confetti{position:fixed;inset:0;pointer-events:none;z-index:99}
-  /* flashcards */
-  .fcard{perspective:900px;cursor:pointer;max-width:460px;margin:0 auto}
-  .fcard-inner{position:relative;width:100%;min-height:190px;transform-style:preserve-3d;transition:transform .35s}
-  .fcard.flipped .fcard-inner{transform:rotateY(180deg)}
-  .face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
-    background:var(--card2);border:1px solid var(--line2);border-radius:14px;
-    display:flex;align-items:center;justify-content:center;text-align:center;
-    padding:28px 22px;font-size:1.05rem;font-weight:600}
-  .face.back{transform:rotateY(180deg);background:linear-gradient(180deg,var(--node),var(--node2));color:#fff}
-  .face .tagline{position:absolute;top:10px;left:14px;font-size:.65rem;letter-spacing:.12em;color:var(--faint);text-transform:uppercase}
-  .frow{display:flex;gap:10px;justify-content:center;margin-top:16px;flex-wrap:wrap}
-  .fmeta{text-align:center;color:var(--faint);font-size:.75rem;margin-top:10px}
-  .fadd{max-width:460px;margin:22px auto 0;display:flex;flex-direction:column;gap:8px}
-  .fadd input{background:#121113;color:var(--ink);border:1px solid var(--line);
-    border-radius:10px;padding:10px 12px;font-family:inherit;font-size:.85rem}
-  .fadd input:focus{outline:none;border-color:var(--acc)}
-  @media(max-width:560px){ h1{font-size:2.2rem} body{padding-top:78px} }
+  .big-timer{font-size:3.4rem;font-weight:700;letter-spacing:-.02em;text-align:center;margin:8px 0}
+  .big-timer.over{color:var(--bad)}
+  .center{text-align:center}
+  .mockslot{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--card2);
+    border:1px solid var(--line);border-radius:10px;margin-bottom:8px;font-size:.88rem}
+  .mockslot .t{flex:1}
+  .mockslot .etime{color:var(--faint);font-size:.78rem;min-width:70px;text-align:right}
 </style>
 </head>
 <body>
-<canvas id="confetti"></canvas>
 
 <nav>
   <span class="brand">GCA Grind<span class="dot">.</span></span>
-  <a href="#roadmap">Roadmap</a><a href="#lectures">Lectures</a><a href="#guided">Guided</a><a href="#flashcards">Cards</a><a href="#independent">Independent</a><a href="#mocks">Mocks</a><a href="#oaday">OA Day</a>
+  <a href="#today">Today</a><a href="#cheatsheet">Cheatsheet</a><a href="#failed">Failed Log</a><a href="#mock">Mock OA</a><a href="#progress">Progress</a><a href="#repplan">Rep Plan</a>
 </nav>
 
 <header>
   <span class="eyebrow mono">Capital One · TDP Associate · GCA</span>
-  <h1>The grind<span class="sq">.</span></h1>
-  <p class="lede">They Do → We Do → I Do. One topic at a time, then batch the independents. Track every rep below — the roadmap fills as you go.</p>
+  <h1>Reps<span class="sq">.</span></h1>
+  <p class="lede">Attempt → fail/succeed → diagnose → retry. Only timed, independent solves move the needle. Everything else is warm-up.</p>
   <div id="count" class="mono"></div>
-  <div class="obar"><div id="bar"></div></div>
-  <div class="obar-meta mono"><span id="bar-count">0/0 reps</span><span id="bar-pct">0%</span></div>
 </header>
 
-<section id="roadmap">
-  <div class="kick mono">Learning path</div>
-  <h2>The roadmap<span class="sq">.</span></h2>
-  <p class="desc">Master each topic in order — tap a topic for the deep dive. Progress per topic: lecture 10% · guided 30% · independent 30% · extra 30%.</p>
-  <div class="chain" id="chain"></div>
-</section>
-
-<section id="lectures">
-  <div class="kick mono">Phase 01 · They do</div>
-  <h2>Lectures<span class="sq">.</span></h2>
-  <p class="desc">Watch, take notes, keep them open beside you. Worth 10% a topic — easy juice.</p>
-  <div id="list-exp"></div>
-</section>
-
-<section id="guided">
-  <div class="kick mono">Phase 02 · We do</div>
-  <h2>Guided reps<span class="sq">.</span></h2>
-  <p class="desc">One step at a time, one topic at a time. Easy exercise first — video example allowed. Retype everything by hand, ghost text stays off. Soft gate: attempt + log stuck points.</p>
-  <div id="list-g"></div>
-</section>
-
-<section id="flashcards">
-  <div class="kick mono">Tie it together</div>
-  <h2>Flashcards<span class="sq">.</span></h2>
-  <p class="desc">After guided reps — flip through, say the answer out loud before flipping. Add your own as you go.</p>
-  <div class="fcard" id="fcard"><div class="fcard-inner">
-    <div class="face front"><span class="tagline mono">question</span><span id="fq"></span></div>
-    <div class="face back"><span class="tagline mono">answer</span><span id="fa"></span></div>
-  </div></div>
-  <div class="frow">
-    <button class="ghost" id="f-prev">← prev</button>
-    <button id="f-flip">flip</button>
-    <button class="ghost" id="f-next">next →</button>
-    <button class="ghost" id="f-shuffle">shuffle</button>
+<section id="today">
+  <div class="kick mono">Daily set</div>
+  <h2>Today<span class="sq">.</span></h2>
+  <p class="desc">1 easy warm-up (10 min) + 2 OA-level (15 min each). No notes, no videos. Set a status when the timer ends — then the pattern unlocks.</p>
+  <div class="trow" style="margin-bottom:14px">
+    <button class="ghost small" id="new-set">↻ new set</button>
+    <span class="mono" id="set-date" style="color:var(--faint);font-size:.78rem"></span>
   </div>
-  <div class="fmeta mono" id="f-meta"></div>
-  <div class="fadd">
-    <input id="f-q" placeholder="question — e.g. [] ordered and changeable. duplicates OK?">
-    <input id="f-a" placeholder="answer — e.g. list">
-    <button class="ghost" id="f-add">+ add card</button>
+  <div id="daily"></div>
+</section>
+
+<section id="cheatsheet">
+  <div class="kick mono">Post-attempt reference</div>
+  <h2>Cheatsheet<span class="sq">.</span></h2>
+  <p class="desc">Code only. Look here <em>after</em> the timer ends, never before.</p>
+  <div id="sheets"></div>
+</section>
+
+<section id="failed">
+  <div class="kick mono">Review engine</div>
+  <h2>Failed rep log<span class="sq">.</span></h2>
+  <p class="desc">Under 30 seconds per entry. This is how a miss becomes a rep.</p>
+  <div class="card">
+    <div class="grid2">
+      <div><label class="f">Problem</label><input type="text" id="fr-problem" placeholder="e.g. Budget pair"></div>
+      <div><label class="f">Expected pattern</label><input type="text" id="fr-expected" placeholder="e.g. two pointers"></div>
+    </div>
+    <div class="grid2">
+      <div><label class="f">Actual approach</label><input type="text" id="fr-actual" placeholder="e.g. nested loops"></div>
+      <div><label class="f">Why missed</label><input type="text" id="fr-why" placeholder="e.g. didn't sort first"></div>
+    </div>
+    <label class="f">Fix</label><input type="text" id="fr-fix" placeholder="e.g. sort, then move ends inward">
+    <div class="grid2">
+      <div><label class="f">Retry date</label><input type="date" id="fr-retry"></div>
+      <div><label class="f">Retry result</label><select id="fr-result">
+        <option value="pending">pending</option><option value="passed">passed</option><option value="failed">failed</option>
+      </select></div>
+    </div>
+    <div class="trow"><button id="fr-add">log it</button>
+      <button class="ghost" id="fr-export">export JSON</button></div>
   </div>
+  <div id="fr-list"></div>
 </section>
 
-<section id="independent">
-  <div class="kick mono">Phase 03 · I do</div>
-  <h2>Independent reps<span class="sq">.</span></h2>
-  <p class="desc">Batch mode. Solo — no video, no autocomplete. Make the example your own, mistakes preserved.</p>
-  <div id="list-i"></div>
-</section>
-
-<section id="mixed">
-  <div class="kick mono">Phase 04 · No labels</div>
-  <h2>Mixed practice<span class="sq">.</span></h2>
-  <p class="desc">Topic not announced. This is the real OA shape — read, recognize, solve.</p>
-  <div id="list-m"></div>
-</section>
-
-<section id="mocks">
-  <div class="kick mono">Phase 05 · Timed</div>
-  <h2>Mocks<span class="sq">.</span></h2>
-  <p class="desc">Diagnostic first, full 70-minute dress rehearsal when checkpoints are green.</p>
-  <div id="list-mk"></div>
-</section>
-
-<section id="oaday">
-  <div class="kick mono">Phase 06 · Ship it</div>
-  <h2>OA day<span class="sq">.</span></h2>
-  <p class="desc">Due before Oct 6 — aim to finish by Oct 5.</p>
-  <div id="list-oa"></div>
-</section>
-
-<section id="log">
-  <div class="kick mono">The soft gate</div>
-  <h2>Stuck-points log<span class="sq">.</span></h2>
-  <p class="desc">Attempt + log what's stuck, then advance. Saves on this device.</p>
-  <textarea id="log-input" class="mono" placeholder="10/02 — lists guided: off-by-one on the slice end. fixed by printing the slice first."></textarea>
-  <div class="row">
-    <button id="log-add">log it 🚀</button>
-    <button class="ghost" id="reset">reset all progress</button>
+<section id="mock">
+  <div class="kick mono">Dress rehearsal</div>
+  <h2>Mock OA<span class="sq">.</span></h2>
+  <p class="desc">70 minutes, 4 problems, no hints, no pausing. Mark each problem done as you finish it — the clock keeps your splits.</p>
+  <div class="card">
+    <div class="big-timer mono" id="mock-display">70:00</div>
+    <div class="trow center" style="justify-content:center">
+      <button id="mock-start">start</button>
+      <button class="ghost" id="mock-reset">reset</button>
+      <button class="ghost" id="mock-finish" disabled>finish + log</button>
+    </div>
+    <div id="mock-slots" style="margin-top:14px"></div>
+    <div id="mock-form" style="display:none;margin-top:14px">
+      <div class="grid2">
+        <div><label class="f">Score (solved / 4)</label><input type="text" id="mk-score" placeholder="e.g. 3/4"></div>
+        <div><label class="f">Patterns missed</label><input type="text" id="mk-pat" placeholder="e.g. monotonic stack"></div>
+      </div>
+      <label class="f">Pacing notes</label><input type="text" id="mk-pace" placeholder="e.g. Q3 ate 30 min, rushed Q4">
+      <div class="trow"><button id="mk-save">save mock</button></div>
+    </div>
   </div>
-  <div id="log-list"></div>
+  <div id="mk-history"></div>
 </section>
 
-<footer class="mono">gca grind · progress lives in this browser's localStorage</footer>
+<section id="progress">
+  <div class="kick mono">Strict rules</div>
+  <h2>Progress<span class="sq">.</span></h2>
+  <p class="desc">A topic checks off after <b>3 clean solves</b> — timed, no notes, no videos. Tap + when you log one.</p>
+  <div id="prog-list"></div>
+</section>
+
+<section id="repplan">
+  <div class="kick mono">The order</div>
+  <h2>Rep plan<span class="sq">.</span></h2>
+  <p class="desc">Work top to bottom. A topic is done when Progress says so.</p>
+  <div id="plan-list"></div>
+</section>
+
+<footer class="mono">gca grind · reps above all · data lives in this browser</footer>
 
 <script>
-const REPO = "https://github.com/cmpsno/cap-one/blob/main";
-const TOPICS = [
-  {n:"01", name:"Strings",           anchor:"TikTok feed titles",                  path:"01-strings",  diff:"easy"},
-  {n:"02", name:"Lists / Arrays",    anchor:"Celtics ticket prices · $300 capstone", path:"02-lists",  diff:"easy"},
-  {n:"03", name:"Dicts / Hash Maps", anchor:"OA difficulty tiers · budget-pair",    path:"03-dicts",  diff:"med"},
-  {n:"04", name:"Big-O",             anchor:"say it before you code it",            path:"04-big-o",  diff:"med"},
-  {n:"05", name:"BFS / DFS",         anchor:"grids & graphs · Lakes Q3",            path:"05-bfs-dfs", diff:"hard"},
-  {n:"06", name:"Stacks",            anchor:"monotonic stack · Pressure Sum Q4",    path:"06-stacks",  diff:"hard"},
-];
-const W = {exp:10, g:30, i:30, x:30};           // per-topic weights
-const PHASE = {exp:"exp", g:"g", i:"i", x:"x"};
-const XPRACT = {"01":"practice/strings","02":"practice/arrays","03":"practice/hashmaps",
-                "04":"practice","05":"practice/grids","06":"practice/stacks"};
-const DETAILS = {
- "01":{core:["immutable — you can't edit in place, build new strings instead","indexing s[i], slicing s[l:r], negative index counts from the end","join / split / strip / lower for cleanup","ord('a') = 97 — letter math for ciphers and counting"],
-       ops:"len O(1) · s[i] O(1) · slice O(k) · substring-in O(n·m)",
-       shape:"Digit Blocks (mock Q1) — parse and transform characters"},
- "02":{core:["ordered, changeable, duplicates OK — index 0 to n-1","append / pop() are O(1) amortized; pop(0) and insert(0) are O(n)","sort is O(n log n); slicing copies, O(k)","enumerate() when you need the index and the value"],
-       ops:"append O(1)* · pop(0) O(n) · sort O(n log n) · slice O(k)",
-       shape:"Shift Schedule (mock Q2) — simulate over an array"},
- "03":{core:["key → value; keys unique; average O(1) get and set","get(k, default) never throws — use it instead of d[k]","counting pattern: d[c] = d.get(c, 0) + 1","two-sum: store what you've seen, look up target − x"],
-       ops:"get / set / del O(1) average · membership O(1)",
-       shape:"budget-pair complements · counting OA tiers per company"},
- "04":{core:["describe growth, drop constants, assume the worst case","O(1) < O(log n) < O(n) < O(n log n) < O(n²)","nested loops over the same n → O(n²); halving each step → O(log n)","count space too — extra array O(n), in-place O(1)"],
-       ops:"say it before you code it",
-       shape:"every problem — state it in the first 30 seconds"},
- "05":{core:["BFS = queue, level by level — shortest path on unweighted grids","DFS = stack or recursion — go deep before going wide","grid moves: 4 directions, bounds check, visited set","Python recursion limit ≈ 1000 — iterative DFS for big grids"],
-       ops:"each cell visited once → O(rows × cols)",
-       shape:"Lakes (mock Q3) — flood fill / count regions"},
- "06":{core:["LIFO: push = append, pop = pop(), peek = s[-1]","valid parentheses: push opens, pop-and-match on close","monotonic: pop while the top breaks the order — each item in and out once → O(n)","next greater / smaller element is the classic tell"],
-       ops:"push / pop / peek O(1) · monotonic scan O(n)",
-       shape:"Pressure Sum (mock Q4)"},
-};
-function detailHTML(n){
-  const d = DETAILS[n];
-  return `<div class="detail">`
-    + `<div class="drow"><span>core ideas</span><ul>${d.core.map(c=>`<li>${c}</li>`).join("")}</ul></div>`
-    + `<div class="drow"><span>must-know ops</span><p class="mono">${d.ops}</p></div>`
-    + `<div class="drow"><span>oa shape</span><p>${d.shape}</p></div>`
-    + `</div>`;
-}
-const file = (p,f)=>`${REPO}/lectures/${p}/${f}`;
-const esc = s=>s.replace(/</g,"&lt;");
-
-/* seed: arrays lecture reviewed + problem worked with Bro Code = 10% */
-const SEED = {"exp-02": true};
-
-function task(id, title, hint){
-  return `<label class="task" data-id="${id}"><input type="checkbox" data-id="${id}">`
-    + `<span class="t">${title}${hint?`<span class="hint">${hint}</span>`:""}</span></label>`;
-}
-function topicTask(ph, t, label, fname, note){
-  return task(`${ph}-${t.n}`, `${t.n} · ${t.name} <span class="pill ${t.diff}">${t.diff==="med"?"med":t.diff}</span>`,
-    `<a href="${file(t.path,fname)}" target="_blank" rel="noopener">${fname}</a> · ${t.anchor} · ${note}`);
-}
-
-document.getElementById("list-exp").innerHTML =
-  TOPICS.map(t=>topicTask("exp",t,"","notes.md","lecture + notes")).join("");
-document.getElementById("list-g").innerHTML =
-  TOPICS.map(t=>topicTask("g",t,"","guided.py","video example OK")).join("")
-  + task("g-gate","Move on when: attempt + stuck points logged","the soft gate — no mastery test, just an honest attempt");
-document.getElementById("list-i").innerHTML =
-  TOPICS.map(t=>topicTask("i",t,"","independent.py","your own example")).join("")
-  + TOPICS.map(t=>task(`x-${t.n}`,`${t.n} · ${t.name} — extra reps`,
-    `<a href="${REPO}/${XPRACT[t.n]}" target="_blank" rel="noopener">${XPRACT[t.n]}/</a> · TODOs, solo batch`)).join("")
-  + task("i-gate","Batch complete — every independent attempted solo","no video, no autocomplete, mistakes preserved");
-document.getElementById("list-m").innerHTML =
-  task("m-1","Mixed set 1 — unlabeled, timed loosely",`<a href="${REPO}/practice" target="_blank" rel="noopener">practice/</a>`)
-  + task("m-2","Mixed set 2 — unlabeled, timed loosely",`<a href="${REPO}/practice" target="_blank" rel="noopener">practice/</a>`);
-document.getElementById("list-mk").innerHTML =
-  task("mk-diag","Diagnostic mock — Digit Blocks · Shift Schedule · Lakes · Pressure Sum",
-    `<a href="${REPO}/mock" target="_blank" rel="noopener">mock/</a> · even a 7% is fine, want the gaps`)
-  + task("mk-full","Full 70-min mock — CodeSignal shape, proctored conditions","4 problems, 70:00, no pausing");
-document.getElementById("list-oa").innerHTML =
-  task("oa-vjt","Virtual Job Tryout — untimed behavioral","do it rested, not rushed")
-  + task("oa-gca","CodeSignal GCA — 4 problems, 70 min, proctored","aim Oct 5 · hard due Oct 6");
-
-/* roadmap tree */
-document.getElementById("chain").innerHTML = TOPICS.map((t,ix)=>
-  `<div class="node" id="node-${t.n}">
-     <h3>${t.name}${t.n==="06"?'<span class="nowpill">▶ NOW</span>':""}</h3><div class="anchor">${t.anchor}</div>
-     <div class="prow mono"><span id="reps-${t.n}">0/4</span><span id="pct-${t.n}">0%</span></div>
-     <div class="track"><div class="fill" id="fill-${t.n}"></div></div>
-     ${detailHTML(t.n)}
-   </div>${ix<TOPICS.length-1?'<div class="link"></div>':''}`
-).join("");
-document.querySelectorAll(".node").forEach(nd=>
-  nd.addEventListener("click", ()=>nd.classList.toggle("open")));
-
-/* state */
+const REPO = "https://github.com/cmpsno/cap-one";
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const fmt = s => String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");
+const todayStr = () => new Date().toISOString().slice(0,10);
 const store = {
-  get(){ try{return Object.assign({}, SEED, JSON.parse(localStorage.getItem("gca-grind")||"{}"))}catch(e){return Object.assign({},SEED)} },
-  set(d){ localStorage.setItem("gca-grind", JSON.stringify(d)); }
+  get(k, fb){ try{ const v = JSON.parse(localStorage.getItem(k)); return v==null?fb:v; }catch(e){ return fb; } },
+  set(k, v){ localStorage.setItem(k, JSON.stringify(v)); }
 };
-let state = store.get();
-const boxes = [...document.querySelectorAll('input[type="checkbox"]')];
 
-function topicPct(t){
-  let p=0, done=0;
-  for(const [k,w] of Object.entries(W)){
-    if(state[`${k}-${t.n}`]){ p+=w; done++; }
-  }
-  return {p, done};
-}
-function render(){
-  boxes.forEach(b=>{
-    b.checked = !!state[b.dataset.id];
-    b.closest(".task").classList.toggle("done", b.checked);
-  });
-  TOPICS.forEach(t=>{
-    const {p, done} = topicPct(t);
-    document.getElementById(`fill-${t.n}`).style.width = p+"%";
-    document.getElementById(`pct-${t.n}`).textContent = p+"%";
-    document.getElementById(`reps-${t.n}`).textContent = `${done}/4`;
-  });
-  const done = boxes.filter(b=>b.checked).length;
-  const pct = Math.round(done/boxes.length*100);
-  document.getElementById("bar").style.width = pct+"%";
-  document.getElementById("bar-count").textContent = `${done}/${boxes.length} reps`;
-  document.getElementById("bar-pct").textContent = pct+"%";
-  if(pct===100 && !render.celebrated){ render.celebrated=true; confetti(); }
-  if(pct<100) render.celebrated=false;
-}
-boxes.forEach(b=>b.addEventListener("change",()=>{ state[b.dataset.id]=b.checked; store.set(state); render(); }));
-
-/* log */
-const logInput=document.getElementById("log-input"), logList=document.getElementById("log-list");
-const getLog=()=>{ try{return JSON.parse(localStorage.getItem("gca-log")||"[]")}catch(e){return[]} };
-function renderLog(){
-  logList.innerHTML = getLog().slice().reverse()
-    .map(e=>`<div class="entry"><div class="d mono">${esc(e.d)}</div>${esc(e.t)}</div>`).join("");
-}
-document.getElementById("log-add").addEventListener("click",()=>{
-  const t=logInput.value.trim(); if(!t) return;
-  const log=getLog(); log.push({d:new Date().toLocaleString(), t});
-  localStorage.setItem("gca-log", JSON.stringify(log));
-  logInput.value=""; renderLog();
-});
-document.getElementById("reset").addEventListener("click",()=>{
-  if(confirm("Reset all checkboxes and the log?")){
-    state={}; store.set(state); localStorage.removeItem("gca-log"); render(); renderLog();
-  }
-});
-
-/* flashcards */
-const SEED_CARDS = [
-  // --- lists / arrays (your 10% — lock it in)
-  ["[] · ordered and changeable · duplicates OK","list"],
-  ["lst.append(x) — cost","O(1) amortized"],
-  ["lst.pop(0) — cost, and why","O(n) — everything shifts left"],
-  ["lst[2:5] gives you","items at index 2, 3, 4"],
-  ["sorted(lst) vs lst.sort()","sorted returns a NEW list; sort rearranges in place"],
-  ["loop with index and value","for i, x in enumerate(lst)"],
-  // --- list methods (front = what it's FOR, back = the method)
-  ["add to the FRONT (or any index) — cost","insert(0, x) — O(n)"],
-  ["tack every item of another list onto the end","extend(other)"],
-  ["append vs extend — the difference","append adds ONE item (even a whole list); extend unpacks each item in"],
-  ["remove by VALUE (first occurrence)","remove(x)"],
-  ["remove by INDEX and get it back","pop(i)"],
-  ["delete by index or slice, returns nothing","del lst[i] / del lst[a:b]"],
-  ["empty the list","clear()"],
-  ["how many times x appears","count(x)"],
-  ["where is x? first index, or throws","index(x)"],
-  ["reverse in place (returns nothing)","reverse()"],
-  ["backwards loop without changing the list","reversed(lst) / lst[::-1]"],
-  ["shallow copy","lst.copy() / lst[:]"],
-  ["repeat the list 3 times","lst * 3"],
-  ["min / max / sum of numbers","min(lst) / max(lst) / sum(lst)"],
-  ["is the list empty? the Pythonic check","if not lst:"],
-  ["keep only the evens — the pattern","[x for x in lst if x % 2 == 0]"],
-  ["flatten one level","[x for sub in lst for x in sub]"],
-  ["pair up two lists element-wise","zip(a, b)"],
-  ["sort by length (or any key)","sort(key=len)"],
-  ["sort biggest-first","sort(reverse=True)"],
-  // --- strings
-  ["s[0] = 'x' fails because strings are ______","immutable — build a new string instead"],
-  ["s[::-1]","the string reversed"],
-  ["''.join(words)","glue a list of strings into one"],
-  ["'  hi  '.strip()","'hi' — trims whitespace"],
-  ["ord('a')","97 — letter math"],
-  // --- string methods (front = what it's FOR, back = the method)
-  ["first character uppercase, rest lowercase → 'hello' → 'Hello'","capitalize()"],
-  ["aggressive lowercase, made for caseless comparisons","casefold()"],
-  ["center text in a field of width w, padded with a fill char","center(w, fillchar)"],
-  ["how many times a substring appears","count(sub)"],
-  ["string → bytes (network, files)","encode()"],
-  ["does the string end with this?","endswith(suffix)"],
-  ["does the string start with this?","startswith(prefix)"],
-  ["where is this substring? → index, or -1 if missing","find(sub)"],
-  ["where is this substring? → index, or throws if missing","index(sub)"],
-  ["break into a list on whitespace or a delimiter","split() / split(delim)"],
-  ["break into a list from the RIGHT, at most n splits","rsplit(delim, n)"],
-  ["split into lines — handles \\n, \\r\\n, etc.","splitlines()"],
-  ["glue a list back into one string","' '.join(list)"],
-  ["trim whitespace (or given chars) from both ends","strip()"],
-  ["trim from the left only / right only","lstrip() / rstrip()"],
-  ["swap every occurrence of old with new","replace(old, new)"],
-  ["all lowercase / ALL UPPERCASE","lower() / upper()"],
-  ["flip the case of every letter","swapcase()"],
-  ["First Letter Of Every Word Uppercase","title()"],
-  ["letters and numbers only, at least one char","isalnum()"],
-  ["digits only","isdigit()"],
-  ["whitespace only","isspace()"],
-  ["pad with leading zeros → '42' → '00042'","zfill(width)"],
-  ["chop off a known prefix / suffix","removeprefix(p) / removesuffix(s)"],
-  ["split into (before, sep, after) on first hit","partition(sep)"],
-  // --- dicts / hash maps
-  ["{key: value} · no duplicate keys","dict"],
-  ["d.get(k, 0) vs d[k] when k is missing","get returns 0, no KeyError"],
-  ["counting pattern: d[c] = ______","d.get(c, 0) + 1"],
-  ["two-sum: for each x, look up ______ in the map","target − x (the complement)"],
-  ["loop keys and values together","for k, v in d.items()"],
-  // --- dict methods (front = what it's FOR, back = the method)
-  ["add k→v, but only if k isn't already there","setdefault(k, default)"],
-  ["grouping: d[key].append(x), creating the list on first sight","d.setdefault(key, []).append(x)"],
-  ["merge another dict in — whose values win on clashes?","d.update(other) — other's win"],
-  ["remove k and hand you its value","pop(k)"],
-  ["remove k, hand you its value, or a fallback if missing","pop(k, default)"],
-  ["remove and return the LAST inserted pair","popitem()"],
-  ["empty the whole dict","clear()"],
-  ["shallow copy","d.copy()"],
-  ["build a dict from a list of keys, all starting at one value","dict.fromkeys(keys, v)"],
-  ["loop just the keys / just the values","d.keys() / d.values()"],
-  ["check a key exists before touching it","k in d — O(1) average"],
-  ["flip keys and values","{v: k for k, v in d.items()}"],
-  ["squares dict in one line","{x: x*x for x in range(n)}"],
-  ["sort by value → list of pairs","sorted(d.items(), key=lambda kv: kv[1])"],
-  ["never think about missing keys again","defaultdict(int) / defaultdict(list)"],
-  ["count anything in one line","Counter(s) — from collections"],
-  ["the k most common items","Counter(s).most_common(k)"],
-  // --- sets & tuples
-  ["{} with no pairs · unordered · no duplicates","set"],
-  ["remove duplicates from a list","list(set(lst))"],
-  ["x in my_set — cost","O(1) average"],
-  ["() · ordered · unchangeable · duplicates OK","tuple"],
-  // --- stacks (you're on this now)
-  ["LIFO · push / pop","stack"],
-  ["push, pop, peek on a Python list","append(x), pop(), s[-1]"],
-  ["valid parentheses: on '(' do what?","push it; on ')' pop and check it matches"],
-  ["monotonic increasing stack: pop while top ______ new value","> new value (it breaks the order)"],
-  ["each item enters and leaves a monotonic stack once, so the scan is","O(n)"],
-  ["peek without popping","s[-1]"],
-  ["is the stack empty?","if not s:"],
-  ["valid parentheses — the full loop","push opens; on close: if empty or pop() doesn't match → False; end: not s"],
-  ["next greater element — the tell","monotonic decreasing stack"],
-  ["daily temperatures / stock span — the pattern","monotonic stack"],
-  ["evaluate RPN like '3 4 +'","push numbers; operator pops two, pushes the result"],
-  ["undo button in an editor","a stack"],
-  ["function calls run on this — why recursion depth matters","the call stack"],
-  // --- queues, BFS / DFS
-  ["FIFO · popleft is O(1) with this","deque (as a queue)"],
-  ["BFS uses a ______, iterative DFS uses a ______","queue / stack"],
-  ["grid BFS/DFS: the three checks per neighbor","in bounds · not visited · is land"],
-  ["visit every node level by level","BFS — breadth-first search"],
-  ["go as deep as possible, then backtrack","DFS — depth-first search"],
-  ["shortest path on an unweighted grid","BFS — first time you reach a cell is the shortest way there"],
-  ["BFS setup: the 3 lines","q = deque([start]); visited = {start}"],
-  ["BFS loop: pop left, then what","for each neighbor: if valid and unvisited → mark visited, append to queue"],
-  ["the 4 grid moves","[(0,1),(0,-1),(1,0),(-1,0)]"],
-  ["mark visited when you ENQUEUE, not when you pop — why","otherwise the same cell gets queued over and over"],
-  ["iterative DFS: swap the queue for a","stack (a plain list) — pop() from the end"],
-  ["recursive DFS skeleton","def dfs(r,c): mark visited; for each valid neighbor → dfs(nr,nc)"],
-  ["Python recursion limit","≈1000 — go iterative for big grids"],
-  ["count islands / lakes — the pattern","flood fill from each unvisited land cell, count the fills"],
-  ["flood fill: what you do to a cell when you visit","mark visited (or sink it to 0)"],
-  // --- big-O
-  ["binary search halves the search each step","O(log n)"],
-  ["two nested loops over n","O(n²)"],
-  ["in big-O you drop ______","constants and lower-order terms"],
-  ["sorting a list of n items","O(n log n)"],
-];
-function getCards(){ try{return JSON.parse(localStorage.getItem("gca-cards")||"[]")}catch(e){return[]} }
-function allCards(){ return SEED_CARDS.concat(getCards()); }
-let fi = 0;
-const fcard = document.getElementById("fcard");
-function showCard(){
-  const cards = allCards();
-  if(!cards.length) return;
-  fi = ((fi % cards.length) + cards.length) % cards.length;
-  fcard.classList.remove("flipped");
-  document.getElementById("fq").textContent = cards[fi][0];
-  document.getElementById("fa").textContent = cards[fi][1];
-  document.getElementById("f-meta").textContent = `${fi+1} / ${cards.length} cards`;
-}
-fcard.addEventListener("click", ()=>fcard.classList.toggle("flipped"));
-document.getElementById("f-flip").addEventListener("click", ()=>fcard.classList.toggle("flipped"));
-document.getElementById("f-next").addEventListener("click", ()=>{ fi++; showCard(); });
-document.getElementById("f-prev").addEventListener("click", ()=>{ fi--; showCard(); });
-document.getElementById("f-shuffle").addEventListener("click", ()=>{
-  fi = Math.random()*allCards().length|0; showCard();
-});
-document.getElementById("f-add").addEventListener("click", ()=>{
-  const q=document.getElementById("f-q").value.trim(), a=document.getElementById("f-a").value.trim();
-  if(!q||!a) return;
-  const custom=getCards(); custom.push([q,a]);
-  localStorage.setItem("gca-cards", JSON.stringify(custom));
-  document.getElementById("f-q").value=""; document.getElementById("f-a").value="";
-  fi = allCards().length-1; showCard();
-});
-showCard();
-
-/* countdown */
-const due=new Date("2026-10-06T23:59:59-04:00");
+/* ---------- countdown ---------- */
+const due = new Date("2026-10-06T23:59:59-04:00");
 function tick(){
-  const ms=due-new Date(), el=document.getElementById("count");
-  if(ms<=0){ el.textContent="OA window closed."; return; }
+  const ms = due - new Date(), el = $("count");
+  if(ms <= 0){ el.textContent = "OA window closed."; return; }
   const d=Math.floor(ms/864e5), h=Math.floor(ms%864e5/36e5), m=Math.floor(ms%36e5/6e4);
-  el.textContent=`⏳ ${d}d ${h}h ${m}m until the OA window closes · aim: done by Oct 5`;
+  el.textContent = `⏳ ${d}d ${h}h ${m}m left · aim: done by Oct 5`;
 }
-setInterval(tick,30000); tick();
+setInterval(tick, 30000); tick();
 
-/* confetti */
-function confetti(){
-  const c=document.getElementById("confetti"), x=c.getContext("2d");
-  c.width=innerWidth; c.height=innerHeight;
-  const cols=["#627eff","#8a82dc","#4ade80","#f5a623","#f472b6"];
-  const ps=Array.from({length:150},()=>({x:Math.random()*c.width,y:-20-Math.random()*c.height*.3,
-    s:4+Math.random()*6,v:2+Math.random()*3,r:Math.random()*Math.PI,vr:(Math.random()-.5)*.2,
-    col:cols[Math.random()*cols.length|0]}));
-  let f=0; (function anim(){
-    x.clearRect(0,0,c.width,c.height); f++;
-    ps.forEach(p=>{p.y+=p.v;p.r+=p.vr;p.x+=Math.sin(f/20+p.r)*1.5;
-      x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.col;x.fillRect(-p.s/2,-p.s/2,p.s,p.s*.6);x.restore();});
-    if(f<220) requestAnimationFrame(anim); else x.clearRect(0,0,c.width,c.height);
-  })();
+/* ---------- problem bank ---------- */
+const BANK = [
+ {id:"cheap-seats", title:"Cheap seats", diff:"easy", mins:10, topic:"Lists / Arrays", pattern:"linear scan",
+  stmt:"ticket_prices = [93, 95, 97, 99, 100, 101, 802, 1647, 3235]\nCount how many prices are under $150. Return the count.",
+  link:"tree/main/practice/arrays"},
+ {id:"title-shout", title:"Title shout", diff:"easy", mins:10, topic:"Strings", pattern:"string iteration + isupper",
+  stmt:"titles = [\"ZUCK'S AI MADE $25B\", \"a brief history of AI\", \"MARKETS RALLY\"]\nCount the words that are ALL CAPS (length > 1).",
+  link:"tree/main/practice/strings"},
+ {id:"tier-check", title:"Tier check", diff:"easy", mins:10, topic:"Dicts / Hash Maps", pattern:"dict lookup",
+  stmt:"tiers = {'Roblox':'expert', 'Freddie Mac':'novice', 'Stripe':'intermediate'}\nWrite in_tier(company, tier) → True/False.",
+  link:"tree/main/practice/hashmaps"},
+ {id:"budget-pair", title:"Budget pair", diff:"med", mins:15, topic:"Two Pointers", pattern:"two pointers (sorted) or hash map",
+  stmt:"prices = [93, 95, 97, 99, 100, 101, 150, 197, 205]\nFind two prices summing to exactly 300. Return the pair or None.",
+  link:"tree/main/practice/arrays"},
+ {id:"digit-runs", title:"Digit runs", diff:"med", mins:15, topic:"Strings", pattern:"linear scan, track current run",
+  stmt:"s = \"1122334111\"\nReturn the longest run of the same digit, e.g. (digit, length).",
+  link:"tree/main/practice/strings"},
+ {id:"good-tier", title:"Good tier", diff:"med", mins:15, topic:"Dicts / Hash Maps", pattern:"dict filter",
+  stmt:"companies = {'Roblox':'expert','Stripe':'intermediate','Freddie Mac':'novice','OpenAI':'expert'}\nReturn the list of companies in the 'expert' tier.",
+  link:"tree/main/practice/hashmaps"},
+ {id:"brackets", title:"Brackets", diff:"med", mins:15, topic:"Stacks", pattern:"stack",
+  stmt:"s = \"([{}])\"\nReturn True if every opener is closed in the correct order.",
+  link:"tree/main/practice/stacks"},
+ {id:"shift-sim", title:"Shift sim", diff:"med", mins:15, topic:"Lists / Arrays", pattern:"array simulation",
+  stmt:"Simulate a rotating shift schedule over 14 days from a start roster.\nReturn the roster on day 14.",
+  link:"tree/main/mock"},
+ {id:"pressure-sum", title:"Pressure sum", diff:"hard", mins:15, topic:"Monotonic Stack", pattern:"monotonic stack",
+  stmt:"pressures = [73, 74, 75, 71, 69, 72, 76, 73]\nFor each day, days until a higher pressure (0 if none).",
+  link:"tree/main/mock"},
+ {id:"lakes", title:"Lakes", diff:"hard", mins:15, topic:"BFS / DFS", pattern:"flood fill",
+  stmt:"grid of 0s (water) and 1s (land).\nCount the connected land regions (4-directional).",
+  link:"tree/main/practice/grids"},
+ {id:"window-max", title:"Window max sum", diff:"hard", mins:15, topic:"Sliding Window", pattern:"sliding window",
+  stmt:"prices = [93, 95, 97, 99, 100, 101, 802]\nk = 3\nReturn the max sum of any k consecutive prices.",
+  link:"tree/main/practice/arrays"},
+];
+const byId = id => BANK.find(p=>p.id===id);
+
+/* ---------- daily set ---------- */
+function pickDaily(){
+  const easy = BANK.filter(p=>p.diff==="easy");
+  const hard = BANK.filter(p=>p.diff!=="easy");
+  const sh = a => a.sort(()=>Math.random()-.5);
+  const ids = [sh([...easy])[0].id, ...sh([...hard]).slice(0,2).map(p=>p.id)];
+  return { date: todayStr(), ids, state: {} };
 }
-render(); renderLog();
+function getDaily(){
+  let d = store.get("capone.dailySet", null);
+  if(!d || d.date !== todayStr()){ d = pickDaily(); store.set("capone.dailySet", d); }
+  return d;
+}
+function timerWidget(mins){
+  const wrap = document.createElement("div");
+  wrap.className = "trow";
+  wrap.innerHTML = `<span class="t-display mono">${fmt(mins*60)}</span>
+    <button class="small" data-a="start">start</button>
+    <button class="small ghost" data-a="stop">stop</button>
+    <button class="small ghost" data-a="reset">reset</button>`;
+  const disp = wrap.querySelector(".t-display");
+  let left = mins*60, iv = null;
+  const render = () => { disp.textContent = fmt(left); disp.classList.toggle("over", left===0); };
+  const stop = () => { if(iv){ clearInterval(iv); iv=null; } };
+  wrap.querySelector('[data-a="start"]').onclick = () => {
+    if(iv || left===0) return;
+    iv = setInterval(()=>{ left--; render(); if(left===0) stop(); }, 1000);
+  };
+  wrap.querySelector('[data-a="stop"]').onclick = stop;
+  wrap.querySelector('[data-a="reset"]').onclick = () => { stop(); left = mins*60; render(); };
+  render();
+  return wrap;
+}
+function renderDaily(){
+  const d = getDaily();
+  $("set-date").textContent = d.date;
+  const box = $("daily"); box.innerHTML = "";
+  d.ids.forEach(id => {
+    const p = byId(id);
+    const st = d.state[id] || (d.state[id] = {status:null, notes:"", revealed:false});
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `
+      <h3>${esc(p.title)} <span class="pill ${p.diff==="med"?"med":p.diff}">${p.diff}</span>
+        <span class="pill info">${p.mins} min</span></h3>
+      <div class="meta mono">${esc(p.topic)} · <a class="src" href="${REPO}/${p.link}" target="_blank" rel="noopener">open files ↗</a></div>
+      <p class="stmt">${esc(p.stmt)}</p>
+      <div class="trow">
+        <button class="small" data-s="solved">solved</button>
+        <button class="small ghost" data-s="failed">failed</button>
+        <button class="small ghost" data-s="stuck">stuck</button>
+        <button class="small ghost" data-r="reveal" ${st.status?"":"disabled"}>reveal pattern</button>
+      </div>
+      <div class="pattern mono">pattern: <b>${esc(p.pattern)}</b></div>
+      <label class="f">Notes</label>
+      <textarea data-n="notes" placeholder="what happened?">${esc(st.notes)}</textarea>`;
+    card.appendChild(timerWidget(p.mins));
+    const btns = card.querySelectorAll("[data-s]");
+    const paint = () => {
+      btns.forEach(b=>{
+        const on = st.status === b.dataset.s;
+        b.classList.toggle("on", on && b.dataset.s==="solved");
+        b.classList.toggle("on-bad", on && b.dataset.s==="failed");
+        b.classList.toggle("on-warn", on && b.dataset.s==="stuck");
+      });
+      card.querySelector('[data-r="reveal"]').disabled = !st.status;
+      card.querySelector(".pattern").classList.toggle("show", st.revealed);
+    };
+    btns.forEach(b => b.onclick = () => {
+      st.status = (st.status === b.dataset.s) ? null : b.dataset.s;
+      store.set("capone.dailySet", d); paint();
+    });
+    card.querySelector('[data-r="reveal"]').onclick = () => { st.revealed = true; store.set("capone.dailySet", d); paint(); };
+    card.querySelector('[data-n="notes"]').oninput = e => { st.notes = e.target.value; store.set("capone.dailySet", d); };
+    paint();
+    box.appendChild(card);
+  });
+}
+$("new-set").onclick = () => {
+  if(confirm("New daily set? Current statuses will be replaced.")){
+    const d = pickDaily(); store.set("capone.dailySet", d); renderDaily();
+  }
+};
+renderDaily();
+
+/* ---------- cheatsheet ---------- */
+const SHEETS = [
+ ["Hash map counting", "counts = {}\nfor x in items:\n    counts[x] = counts.get(x, 0) + 1"],
+ ["Two pointers", "l, r = 0, len(a) - 1\nwhile l < r:\n    s = a[l] + a[r]\n    if s == target:\n        break\n    elif s < target:\n        l += 1\n    else:\n        r -= 1"],
+ ["Sliding window", "window = sum(a[:k])\nbest = window\nfor i in range(k, len(a)):\n    window += a[i] - a[i - k]\n    best = max(best, window)"],
+ ["BFS (queue)", "from collections import deque\nq, seen = deque([start]), {start}\nwhile q:\n    n = q.popleft()\n    for m in neighbors(n):\n        if m not in seen:\n            seen.add(m)\n            q.append(m)"],
+ ["DFS (stack)", "stack, seen = [start], {start}\nwhile stack:\n    n = stack.pop()\n    for m in neighbors(n):\n        if m not in seen:\n            seen.add(m)\n            stack.append(m)"],
+ ["Monotonic stack", "st = []  # increasing\nfor i, x in enumerate(a):\n    while st and a[st[-1]] > x:\n        st.pop()\n    st.append(i)"],
+ ["String builder", "parts = []\nfor ch in s:\n    parts.append(ch)\nout = \"\".join(parts)"],
+ ["Matrix traversal", "DIRS = [(0,1),(0,-1),(1,0),(-1,0)]\nfor dr, dc in DIRS:\n    nr, nc = r + dr, c + dc\n    if 0 <= nr < R and 0 <= nc < C and (nr, nc) not in seen:\n        ..."],
+ ["Big-O quick ref", "O(1) < O(log n) < O(n) < O(n log n) < O(n^2)\nappend/pop O(1) · sort O(n log n) · slice O(k)\ndict get/set O(1) avg"],
+];
+$("sheets").innerHTML = SHEETS.map(([t,c]) =>
+  `<h3 style="margin:18px 0 8px;font-size:.95rem">${esc(t)}</h3><pre>${esc(c)}</pre>`).join("");
+
+/* ---------- failed rep log ---------- */
+function getFR(){ return store.get("capone.failedReps", []); }
+function renderFR(){
+  const list = getFR();
+  $("fr-list").innerHTML = list.map((e,i) => `
+    <div class="entry">
+      <div class="d mono">${esc(e.date)} · ${esc(e.problem)}</div>
+      <div class="rowline"><b>Expected:</b> ${esc(e.expected)} · <b>Did:</b> ${esc(e.actual)}</div>
+      <div class="rowline"><b>Why:</b> ${esc(e.why)}</div>
+      <div class="rowline"><b>Fix:</b> ${esc(e.fix)}</div>
+      <div class="rowline"><b>Retry:</b> ${esc(e.retry||"—")} · <b>Result:</b> ${esc(e.result)}</div>
+      <button class="small ghost" data-del="${i}">delete</button>
+    </div>`).join("") || `<p class="desc">No failed reps logged. Go fail at something.</p>`;
+  $("fr-list").querySelectorAll("[data-del]").forEach(b => b.onclick = () => {
+    const l = getFR(); l.splice(+b.dataset.del, 1); store.set("capone.failedReps", l); renderFR();
+  });
+}
+$("fr-add").onclick = () => {
+  const v = id => $(id).value.trim();
+  if(!v("fr-problem")){ alert("Name the problem first."); return; }
+  const l = getFR();
+  l.unshift({ date: todayStr(), problem: v("fr-problem"), expected: v("fr-expected"),
+    actual: v("fr-actual"), why: v("fr-why"), fix: v("fr-fix"),
+    retry: $("fr-retry").value, result: $("fr-result").value });
+  store.set("capone.failedReps", l);
+  ["fr-problem","fr-expected","fr-actual","fr-why","fr-fix","fr-retry"].forEach(id => $(id).value = "");
+  $("fr-result").value = "pending";
+  renderFR();
+};
+$("fr-export").onclick = () => {
+  const blob = new Blob([JSON.stringify(getFR(), null, 2)], {type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob); a.download = "failed-reps.json"; a.click();
+};
+renderFR();
+
+/* ---------- mock OA ---------- */
+const MOCK_P = [
+ {name:"Q1 · Digit Blocks", topic:"Strings"},
+ {name:"Q2 · Shift Schedule", topic:"Arrays"},
+ {name:"Q3 · Lakes", topic:"BFS / DFS"},
+ {name:"Q4 · Pressure Sum", topic:"Monotonic Stack"},
+];
+let mockLeft = 70*60, mockIv = null, mockSplits = {};
+function mockRender(){
+  $("mock-display").textContent = fmt(mockLeft);
+  $("mock-display").classList.toggle("over", mockLeft===0);
+}
+$("mock-slots").innerHTML = MOCK_P.map((p,i) => `
+  <div class="mockslot"><span class="t"><b>${esc(p.name)}</b> <span class="pill info">${esc(p.topic)}</span></span>
+  <span class="etime mono" id="mk-t${i}">—</span>
+  <button class="small ghost" id="mk-b${i}">done</button></div>`).join("");
+MOCK_P.forEach((p,i) => {
+  $("mk-b"+i).onclick = () => {
+    if(mockSplits[i] || !mockIv) return;
+    mockSplits[i] = fmt(70*60 - mockLeft);
+    $("mk-t"+i).textContent = mockSplits[i];
+    $("mk-b"+i).disabled = true;
+  };
+});
+$("mock-start").onclick = () => {
+  if(mockIv || mockLeft===0) return;
+  $("mock-finish").disabled = false;
+  mockIv = setInterval(()=>{ mockLeft--; mockRender(); if(mockLeft===0){ clearInterval(mockIv); mockIv=null; } }, 1000);
+};
+$("mock-reset").onclick = () => {
+  if(mockIv){ clearInterval(mockIv); mockIv=null; }
+  mockLeft = 70*60; mockSplits = {}; mockRender();
+  MOCK_P.forEach((p,i)=>{ $("mk-t"+i).textContent="—"; $("mk-b"+i).disabled=false; });
+  $("mock-form").style.display = "none"; $("mock-finish").disabled = true;
+};
+$("mock-finish").onclick = () => {
+  if(mockIv){ clearInterval(mockIv); mockIv=null; }
+  $("mock-form").style.display = "block";
+};
+function getMK(){ return store.get("capone.mockResults", []); }
+function renderMK(){
+  $("mk-history").innerHTML = getMK().map(m => `
+    <div class="entry" style="border-left-color:var(--acc)">
+      <div class="d mono">${esc(m.date)} · score ${esc(m.score)}</div>
+      <div class="rowline"><b>Splits:</b> <span class="mono">${esc(m.splits)}</span></div>
+      <div class="rowline"><b>Missed:</b> ${esc(m.patterns)}</div>
+      <div class="rowline"><b>Pacing:</b> ${esc(m.pacing)}</div>
+    </div>`).join("");
+}
+$("mk-save").onclick = () => {
+  const l = getMK();
+  l.unshift({ date: todayStr(),
+    score: $("mk-score").value.trim() || "?/4",
+    patterns: $("mk-pat").value.trim(),
+    pacing: $("mk-pace").value.trim(),
+    splits: MOCK_P.map((p,i)=>`Q${i+1} ${mockSplits[i]||"—"}`).join(" · ") });
+  store.set("capone.mockResults", l);
+  $("mk-score").value = $("mk-pat").value = $("mk-pace").value = "";
+  $("mock-form").style.display = "none";
+  renderMK();
+};
+mockRender(); renderMK();
+
+/* ---------- progress ---------- */
+const TOPICS = [
+ {n:"01", name:"Strings", sub:"Digit Blocks shape"},
+ {n:"02", name:"Lists / Arrays", sub:"highest priority"},
+ {n:"03", name:"Dicts / Hash Maps", sub:"counting · two-sum"},
+ {n:"04", name:"Big-O", sub:"say it in 30 seconds"},
+ {n:"05", name:"BFS / DFS", sub:"Lakes shape"},
+ {n:"06", name:"Stacks", sub:"Pressure Sum shape"},
+ {n:"07", name:"Sliding Window / Two Pointers", sub:"new — high value"},
+];
+function getPR(){ return store.get("capone.topicProgress", {}); }
+function statusOf(s){
+  if(s >= 3) return `<span class="pill good">rep-complete</span>`;
+  if(s >= 1) return `<span class="pill med">in progress</span>`;
+  return `<span class="pill info">not started</span>`;
+}
+function renderPR(){
+  const pr = getPR();
+  $("prog-list").innerHTML = TOPICS.map(t => {
+    const e = pr[t.n] || {solves:0, date:null};
+    return `<div class="tprog">
+      <div class="nm">${t.n} · ${esc(t.name)}<span class="sub">${esc(t.sub)}${e.date?` · last ${esc(e.date)}`:""}</span></div>
+      <div class="dots">${[0,1,2].map(i=>`<span class="dot${i<e.solves?" fill":""}"></span>`).join("")}</div>
+      ${statusOf(e.solves)}
+      <button class="small ghost" data-pm="${t.n}|-1">−</button>
+      <button class="small" data-pm="${t.n}|1">+ rep</button>
+    </div>`;
+  }).join("");
+  $("prog-list").querySelectorAll("[data-pm]").forEach(b => b.onclick = () => {
+    const [n, d] = b.dataset.pm.split("|");
+    const pr2 = getPR();
+    const e = pr2[n] || (pr2[n] = {solves:0, date:null});
+    e.solves = Math.max(0, Math.min(9, e.solves + (+d)));
+    if(+d > 0) e.date = todayStr();
+    store.set("capone.topicProgress", pr2);
+    renderPR(); renderPlan();
+  });
+}
+renderPR();
+
+/* ---------- rep plan ---------- */
+function renderPlan(){
+  const pr = getPR();
+  $("plan-list").innerHTML = TOPICS.map((t,i) => {
+    const e = pr[t.n] || {solves:0};
+    return `<div class="planrow"><span class="n mono">${t.n}</span>
+      <span class="t">${esc(t.name)}<span class="sub">${esc(t.sub)}</span></span>
+      ${statusOf(e.solves)}</div>`;
+  }).join("");
+}
+renderPlan();
 </script>
 </body>
 </html>
