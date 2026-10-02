@@ -6,6 +6,9 @@ how code slows as data grows
 2. machine independent (# of steps to completion)
 3. ignore smaller operations
 
+
+<img width="873" height="387" alt="image" src="https://github.com/user-attachments/assets/086a307a-8443-4dcc-94a7-11e310abda9e" />
+
 example: 
 - 0(1): constant time
     random access of an element in array
