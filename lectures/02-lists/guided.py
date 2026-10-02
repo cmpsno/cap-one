@@ -8,9 +8,12 @@ ticket_prices = [93, 95, 97, 97, 97, 99, 100, 100, 100, 101,
 # rep 1: print each price on its own line
 
 for price in ticket_prices: 
-    if price < cheapest: 
-        cheapest = price
+  print(price)
 
-# rep 2: 
+# rep 2: cheapest without min()
 
+cheapest = ticket_prices[0]
+for price in ticket_prices:
+  if price < cheapest: 
+      cheapest = price
 print(cheapest)
