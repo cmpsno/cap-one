@@ -19,7 +19,9 @@ for price in ticket_prices:
 print(cheapest)
 
 # rep 3: how many under $150
+count = 0
+for price in ticket_prices:
+    if price < 150:
+        count = count + 1
+print(count)
 
-count = 0  
-  if price < 150:
-    count = count + 1
