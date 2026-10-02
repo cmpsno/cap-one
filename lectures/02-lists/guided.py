@@ -20,4 +20,6 @@ print(cheapest)
 
 # rep 3: how many under $150
 
-count = 0
+count = 0  
+  if price < 150:
+    count = count + 1
